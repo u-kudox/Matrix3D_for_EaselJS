@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>constructor | Matrix3D for EaselJS</title>
+<link rel="stylesheet" type="text/css" href="css/style.css" media="all">
+<script type="text/javascript" src="http://code.createjs.com/easeljs-0.7.1.min.js"></script>
+<script type="text/javascript" src="js/vector3d-1.1.0.min.js"></script>
+<script type="text/javascript" src="js/matrix3d-0.1.0.min.js"></script>
+
+<script type="text/javascript">
+(function(window) {
+
+	var m1 = new createjs.Matrix3D();
+	console.log(m1.rawData); // [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]
+
+	var m2 = new createjs.Matrix3D([1.5, 0, 0, 0, 0, 1.25, 0, 0, 0, 0, 2, 0, 15, -25, 100, 1]);
+	console.log(m2.rawData); // [1.5, 0, 0, 0, 0, 1.25, 0, 0, 0, 0, 2, 0, 15, -25, 100, 1]
+
+}(window));
+</script>
+</head>
+<body>
+<canvas width="640" height="360" id="my-canvas"></canvas>
+</body>
+</html>
