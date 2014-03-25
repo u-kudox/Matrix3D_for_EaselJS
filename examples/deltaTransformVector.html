@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>deltaTransformVector | Matrix3D for EaselJS</title>
+<link rel="stylesheet" type="text/css" href="css/style.css" media="all">
+<script type="text/javascript" src="http://code.createjs.com/easeljs-0.7.1.min.js"></script>
+<script type="text/javascript" src="js/vector3d-1.1.0.min.js"></script>
+<script type="text/javascript" src="js/matrix3d-0.1.0.min.js"></script>
+
+<script type="text/javascript">
+(function(window) {
+
+	var m1 = new createjs.Matrix3D();
+	m1.prependScale(2, 3, 4);
+	m1.prependTranslation(10, 10, 10);
+	console.log(m1.toString()); // [Matrix3D [2,0,0,0,0,3,0,0,0,0,4,0,20,30,40,1]]
+	var v1 = new createjs.Vector3D(1, 2, 3);
+	var v2 = m1.deltaTransformVector(v1);
+	console.log(v2.toString()); // [Vector3D (x=2 y=6 z=12)]
+
+}(window));
+</script>
+</head>
+<body>
+<canvas width="640" height="360" id="my-canvas"></canvas>
+</body>
+</html>

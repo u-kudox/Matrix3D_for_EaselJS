@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>copyRawDataTo | Matrix3D for EaselJS</title>
+<link rel="stylesheet" type="text/css" href="css/style.css" media="all">
+<script type="text/javascript" src="http://code.createjs.com/easeljs-0.7.1.min.js"></script>
+<script type="text/javascript" src="js/vector3d-1.1.0.min.js"></script>
+<script type="text/javascript" src="js/matrix3d-0.1.0.min.js"></script>
+
+<script type="text/javascript">
+(function(window) {
+
+	var m1 = new createjs.Matrix3D([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]);
+	var a1 = [];
+	var a2 = [];
+	m1.copyRawDataTo(a1);
+	console.log(a1.toString()); // 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15
+	m1.copyRawDataTo(a2, 0, true);
+	console.log(a2.toString()); // 0,4,8,12,1,5,9,13,2,6,10,14,3,7,11,15
+
+}(window));
+</script>
+</head>
+<body>
+<canvas width="640" height="360" id="my-canvas"></canvas>
+</body>
+</html>

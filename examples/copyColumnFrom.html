@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>copyColumnFrom | Matrix3D for EaselJS</title>
+<link rel="stylesheet" type="text/css" href="css/style.css" media="all">
+<script type="text/javascript" src="http://code.createjs.com/easeljs-0.7.1.min.js"></script>
+<script type="text/javascript" src="js/vector3d-1.1.0.min.js"></script>
+<script type="text/javascript" src="js/matrix3d-0.1.0.min.js"></script>
+
+<script type="text/javascript">
+(function(window) {
+
+	var m1 = new createjs.Matrix3D();
+	console.log(m1.toString()); // [Matrix3D [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]]
+	var v1 = new createjs.Vector3D(10, 20, 30, 40);
+	m1.copyColumnFrom(2, v1);
+	console.log(m1.toString()); // [Matrix3D [1, 0, 0, 0, 0, 1, 0, 0, 10, 20, 30, 40, 0, 0, 0, 1]]
+
+}(window));
+</script>
+</head>
+<body>
+<canvas width="640" height="360" id="my-canvas"></canvas>
+</body>
+</html>

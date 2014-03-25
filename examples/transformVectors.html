@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>transformVectors | Matrix3D for EaselJS</title>
+<link rel="stylesheet" type="text/css" href="css/style.css" media="all">
+<script type="text/javascript" src="http://code.createjs.com/easeljs-0.7.1.min.js"></script>
+<script type="text/javascript" src="js/vector3d-1.1.0.min.js"></script>
+<script type="text/javascript" src="js/matrix3d-0.1.0.min.js"></script>
+
+<script type="text/javascript">
+(function(window) {
+
+	var m1 = new createjs.Matrix3D();
+	m1.prependScale(2, 3, 4);
+	m1.prependTranslation(1, 1, 1);
+	console.log(m1.toString());
+	var vin = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+	console.log(vin);
+	var vout = [];
+	m1.transformVectors(vin, vout);
+	console.log(vout);
+
+}(window));
+</script>
+</head>
+<body>
+<canvas width="640" height="360" id="my-canvas"></canvas>
+</body>
+</html>
