@@ -23,7 +23,25 @@ module.exports = function(grunt) {
 		},
 		clean : {
 			matrix3d : {
-				src : ['lib/matrix3d-*.js', 'examples/js/matrix-*.js']
+				src : ['lib/matrix3d-*.js', 'examples/js/matrix3d-*.js']
+			}
+		},
+		replace : {
+			matrix3d : {
+				src : ['examples/*.html'],
+				overwrite : true,
+				replacements : [{
+					from : /js\/matrix3d-.+min\.js/,
+					to : 'js/matrix3d-<%= pkg.version %>.min.js'
+				}]
+			},
+			vector3d : {
+				src : ['examples/*.html'],
+				overwrite : true,
+				replacements : [{
+					from : /js\/vector3d-.+min\.js/,
+					to : 'js/vector3d-1.1.0.min.js'
+				}]
 			}
 		}
 	});
@@ -32,6 +50,7 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-copy');
 	grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.loadNpmTasks('grunt-contrib-clean');
+	grunt.loadNpmTasks('grunt-text-replace');
 
-	grunt.registerTask('matrix3d', ['clean:matrix3d', 'uglify:matrix3d', 'copy:matrix3d']);
+	grunt.registerTask('matrix3d', ['clean:matrix3d', 'uglify:matrix3d', 'copy:matrix3d', 'replace:matrix3d']);
 };
