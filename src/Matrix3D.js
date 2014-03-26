@@ -41,23 +41,17 @@ this.createjs = this.createjs || {};
 					m21 = rd[1],  m22 = rd[5],  m23 = rd[9],  m24 = rd[13],
 					m31 = rd[2],  m32 = rd[6],  m33 = rd[10], m34 = rd[14],
 					m41 = rd[3],  m42 = rd[7],  m43 = rd[11], m44 = rd[15];
-			var m33m44 = m33 * m44;
-			var m43m24 = m43 * m24;
-			var m23m34 = m23 * m34;
-			var m43m34 = m43 * m34;
-			var m23m44 = m23 * m44;
-			var m33m24 = m33 * m24;
-			var m21m32 = m21 * m32;
-			var m31m42 = m31 * m42;
-			var m41m22 = m41 * m22;
-			var m21m42 = m21 * m42;
-			var m31m22 = m31 * m22;
-			var m41m32 = m41 * m32;
-			var d1 = m11 * (m22 * m33m44 + m32 * m43m24 + m42 * m23m34 - m22 * m43m34 - m32 * m23m44 - m42 * m33m24);
-			var d2 = m12 * (m21 * m33m44 + m31 * m43m24 + m41 * m23m34 - m21 * m43m34 - m31 * m23m44 - m41 * m33m24);
-			var d3 = m13 * (m21m32 * m44 + m31m42 * m24 + m41m22 * m34 - m21m42 * m34 - m31m22 * m44 - m41m32 * m24);
-			var d4 = m14 * (m21m32 * m43 + m31m42 * m23 + m41m22 * m33 - m21m42 * m33 - m31m22 * m43 - m41m32 * m23);
-			return d1 - d2 + d3 - d4;
+			var m33m44_m43m34 = m33 * m44 - m43 * m34,
+					m23m44_m43m24 = m23 * m44 - m43 * m24,
+					m23m34_m33m24 = m23 * m34 - m33 * m24,
+					m31m42_m41m32 = m31 * m42 - m41 * m32,
+					m21m42_m41m22 = m21 * m42 - m41 * m22,
+					m21m32_m31m22 = m21 * m32 - m31 * m22;
+			var det = m11 * (m22 * m33m44_m43m34 - m32 * m23m44_m43m24 + m42 * m23m34_m33m24) -
+								m12 * (m21 * m33m44_m43m34 - m31 * m23m44_m43m24 + m41 * m23m34_m33m24) +
+								m13 * (m24 * m31m42_m41m32 - m34 * m21m42_m41m22 + m44 * m21m32_m31m22) -
+								m14 * (m23 * m31m42_m41m32 - m33 * m21m42_m41m22 + m43 * m21m32_m31m22);
+			return det;
 		},
 
 		/**
@@ -467,12 +461,81 @@ this.createjs = this.createjs || {};
 	* <pre><code></code></pre>
 	**/
 	p.invert = function() {
+		var rd = this.rawData;
+		var m11 = rd[0],  m12 = rd[4],  m13 = rd[8],  m14 = rd[12],
+				m21 = rd[1],  m22 = rd[5],  m23 = rd[9],  m24 = rd[13],
+				m31 = rd[2],  m32 = rd[6],  m33 = rd[10], m34 = rd[14],
+				m41 = rd[3],  m42 = rd[7],  m43 = rd[11], m44 = rd[15];
+		/*
+		var m33m44 = m33 * m44,  m43m34 = m43 * m34,
+				m23m44 = m23 * m44,  m43m24 = m43 * m24,
+				m23m34 = m23 * m34,  m33m24 = m33 * m24,
+				m31m42 = m31 * m42,  m41m32 = m41 * m32,
+				m21m42 = m21 * m42,  m41m22 = m41 * m22,
+				m21m32 = m21 * m32,  m31m22 = m31 * m22;
+		*/
+		var m33m44_m43m34 = m33 * m44 - m43 * m34,
+				m23m44_m43m24 = m23 * m44 - m43 * m24,
+				m23m34_m33m24 = m23 * m34 - m33 * m24,
+				m31m42_m41m32 = m31 * m42 - m41 * m32,
+				m21m42_m41m22 = m21 * m42 - m41 * m22,
+				m21m32_m31m22 = m21 * m32 - m31 * m22;
+		var det = m11 * (m22 * m33m44_m43m34 - m32 * m23m44_m43m24 + m42 * m23m34_m33m24) -
+							m12 * (m21 * m33m44_m43m34 - m31 * m23m44_m43m24 + m41 * m23m34_m33m24) +
+							m13 * (m24 * m31m42_m41m32 - m34 * m21m42_m41m22 + m44 * m21m32_m31m22) -
+							m14 * (m23 * m31m42_m41m32 - m33 * m21m42_m41m22 + m43 * m21m32_m31m22);
+		if (det === 0) {
+			return false;
+		}
+		var idet = 1 / det;
+		rd[0] = (m22 * m33m44 + m23 * m34 * m42 + m24 * m32 * m43 - m22 * m34 * m43 - m23 * m32 * m44 - m24 * m33 * m42) * idet;
+		rd[1] = (m21 * m34 * m43 + m23 * m31 * m44 + m24 * m33 * m41 - m21 * m33m44 - m23 * m34 * m41 - m24 * m31 * m43) * idet;
+		rd[2] = (m21 * m32 * m44 + m22 * m34 * m41 + m24 * m31 * m42 - m21 * m34 * m42 - m22 * m31 * m44 - m24 * m32 * m41) * idet;
+		rd[3] = (m21 * m33 * m42 + m22 * m31 * m43 + m23 * m32 * m41 - m21 * m32 * m43 - m22 * m33 * m41 - m23 * m31 * m42) * idet;
+		rd[4] = (m12 * m34 * m43 + m13 * m32 * m44 + m14 * m33 * m42 - m12 * m33m44 - m13 * m34 * m42 - m14 * m32 * m43) * idet;
+		rd[5] = (m11 * m33m44 + m13 * m34 * m41 + m14 * m31 * m43 - m11 * m34 * m43 - m13 * m31 * m44 - m14 * m33 * m41) * idet;
+		rd[6] = (m11 * m34 * m42 + m12 * m31 * m44 + m14 * m32 * m41 - m11 * m32 * m44 - m12 * m34 * m41 - m14 * m31 * m42) * idet;
+		rd[7] = (m11 * m32 * m43 + m12 * m33 * m41 + m13 * m31 * m42 - m11 * m33 * m42 - m12 * m31 * m43 - m13 * m32 * m41) * idet;
+		rd[8] = (m12 * m23 * m44 + m13 * m24 * m42 + m14 * m22 * m43 - m12 * m24 * m43 - m13 * m22 * m44 - m14 * m23 * m42) * idet;
+		rd[9] = (m11 * m24 * m43 + m13 * m21 * m44 + m14 * m23 * m41 - m11 * m23 * m44 - m13 * m24 * m41 - m14 * m21 * m43) * idet;
+		rd[10] = (m11 * m22 * m44 + m12 * m24 * m41 + m14 * m21 * m42 - m11 * m24 * m42 - m12 * m21 * m44 - m14 * m22 * m41) * idet;
+		rd[11] = (m11 * m23 * m42 + m12 * m21 * m43 + m13 * m22 * m41 - m11 * m22 * m43 - m12 * m23 * m41 - m13 * m21 * m42) * idet;
+		rd[12] = (m12 * m24 * m33 + m13 * m22 * m34 + m14 * m23 * m32 - m12 * m23 * m34 - m13 * m24 * m32 - m14 * m22 * m33) * idet;
+		rd[13] = (m11 * m23 * m34 + m13 * m24 * m31 + m14 * m21 * m33 - m11 * m24 * m33 - m13 * m21 * m34 - m14 * m23 * m31) * idet;
+		rd[14] = (m11 * m24 * m32 + m12 * m21 * m34 + m14 * m22 * m31 - m11 * m22 * m34 - m12 * m24 * m31 - m14 * m21 * m32) * idet;
+		rd[15] = (m11 * m22 * m33 + m12 * m23 * m31 + m13 * m21 * m32 - m11 * m23 * m32 - m12 * m21 * m33 - m13 * m22 * m31) * idet;
+	};
+
+/*
+	p.invert = function() {
 		var det = this.determinant;
 		if (det === 0) {
 			return false;
 		}
+		var idet = 1 / det;
+		var rd = this.rawData;
+		var m11 = rd[0],  m12 = rd[4],  m13 = rd[8],  m14 = rd[12],
+				m21 = rd[1],  m22 = rd[5],  m23 = rd[9],  m24 = rd[13],
+				m31 = rd[2],  m32 = rd[6],  m33 = rd[10], m34 = rd[14],
+				m41 = rd[3],  m42 = rd[7],  m43 = rd[11], m44 = rd[15];
+		rd[0] = (m22 * m33 * m44 + m23 * m34 * m42 + m24 * m32 * m43 - m22 * m34 * m43 - m23 * m32 * m44 - m24 * m33 * m42) * idet;
+		rd[1] = (m21 * m34 * m43 + m23 * m31 * m44 + m24 * m33 * m41 - m21 * m33 * m44 - m23 * m34 * m41 - m24 * m31 * m43) * idet;
+		rd[2] = (m21 * m32 * m44 + m22 * m34 * m41 + m24 * m31 * m42 - m21 * m34 * m42 - m22 * m31 * m44 - m24 * m32 * m41) * idet;
+		rd[3] = (m21 * m33 * m42 + m22 * m31 * m43 + m23 * m32 * m41 - m21 * m32 * m43 - m22 * m33 * m41 - m23 * m31 * m42) * idet;
+		rd[4] = (m12 * m34 * m43 + m13 * m32 * m44 + m14 * m33 * m42 - m12 * m33 * m44 - m13 * m34 * m42 - m14 * m32 * m43) * idet;
+		rd[5] = (m11 * m33 * m44 + m13 * m34 * m41 + m14 * m31 * m43 - m11 * m34 * m43 - m13 * m31 * m44 - m14 * m33 * m41) * idet;
+		rd[6] = (m11 * m34 * m42 + m12 * m31 * m44 + m14 * m32 * m41 - m11 * m32 * m44 - m12 * m34 * m41 - m14 * m31 * m42) * idet;
+		rd[7] = (m11 * m32 * m43 + m12 * m33 * m41 + m13 * m31 * m42 - m11 * m33 * m42 - m12 * m31 * m43 - m13 * m32 * m41) * idet;
+		rd[8] = (m12 * m23 * m44 + m13 * m24 * m42 + m14 * m22 * m43 - m12 * m24 * m43 - m13 * m22 * m44 - m14 * m23 * m42) * idet;
+		rd[9] = (m11 * m24 * m43 + m13 * m21 * m44 + m14 * m23 * m41 - m11 * m23 * m44 - m13 * m24 * m41 - m14 * m21 * m43) * idet;
+		rd[10] = (m11 * m22 * m44 + m12 * m24 * m41 + m14 * m21 * m42 - m11 * m24 * m42 - m12 * m21 * m44 - m14 * m22 * m41) * idet;
+		rd[11] = (m11 * m23 * m42 + m12 * m21 * m43 + m13 * m22 * m41 - m11 * m22 * m43 - m12 * m23 * m41 - m13 * m21 * m42) * idet;
+		rd[12] = (m12 * m24 * m33 + m13 * m22 * m34 + m14 * m23 * m32 - m12 * m23 * m34 - m13 * m24 * m32 - m14 * m22 * m33) * idet;
+		rd[13] = (m11 * m23 * m34 + m13 * m24 * m31 + m14 * m21 * m33 - m11 * m24 * m33 - m13 * m21 * m34 - m14 * m23 * m31) * idet;
+		rd[14] = (m11 * m24 * m32 + m12 * m21 * m34 + m14 * m22 * m31 - m11 * m22 * m34 - m12 * m24 * m31 - m14 * m21 * m32) * idet;
+		rd[15] = (m11 * m22 * m33 + m12 * m23 * m31 + m13 * m21 * m32 - m11 * m23 * m32 - m12 * m21 * m33 - m13 * m22 * m31) * idet;
 	};
-
+*/
 
 	/**
 	*
