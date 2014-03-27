@@ -22,7 +22,7 @@ this.createjs = this.createjs || {};
 		if (!!v && v.length === 16) {
 			this.rawData = new Float32Array(v);
 		} else {
-			this.identity();
+			this.rawData = new Float32Array([1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]);
 		}
 	}
 
@@ -38,19 +38,19 @@ this.createjs = this.createjs || {};
 		get determinant() {
 			var rd = this.rawData;
 			var m11 = rd[0],  m12 = rd[4],  m13 = rd[8],  m14 = rd[12],
-					m21 = rd[1],  m22 = rd[5],  m23 = rd[9],  m24 = rd[13],
-					m31 = rd[2],  m32 = rd[6],  m33 = rd[10], m34 = rd[14],
-					m41 = rd[3],  m42 = rd[7],  m43 = rd[11], m44 = rd[15];
+			    m21 = rd[1],  m22 = rd[5],  m23 = rd[9],  m24 = rd[13],
+			    m31 = rd[2],  m32 = rd[6],  m33 = rd[10], m34 = rd[14],
+			    m41 = rd[3],  m42 = rd[7],  m43 = rd[11], m44 = rd[15];
 			var m33m44_m43m34 = m33 * m44 - m43 * m34,
-					m23m44_m43m24 = m23 * m44 - m43 * m24,
-					m23m34_m33m24 = m23 * m34 - m33 * m24,
-					m31m42_m41m32 = m31 * m42 - m41 * m32,
-					m21m42_m41m22 = m21 * m42 - m41 * m22,
-					m21m32_m31m22 = m21 * m32 - m31 * m22;
+			    m23m44_m43m24 = m23 * m44 - m43 * m24,
+			    m23m34_m33m24 = m23 * m34 - m33 * m24,
+			    m31m42_m41m32 = m31 * m42 - m41 * m32,
+			    m21m42_m41m22 = m21 * m42 - m41 * m22,
+			    m21m32_m31m22 = m21 * m32 - m31 * m22;
 			var det = m11 * (m22 * m33m44_m43m34 - m32 * m23m44_m43m24 + m42 * m23m34_m33m24) -
-								m12 * (m21 * m33m44_m43m34 - m31 * m23m44_m43m24 + m41 * m23m34_m33m24) +
-								m13 * (m24 * m31m42_m41m32 - m34 * m21m42_m41m22 + m44 * m21m32_m31m22) -
-								m14 * (m23 * m31m42_m41m32 - m33 * m21m42_m41m22 + m43 * m21m32_m31m22);
+			          m12 * (m21 * m33m44_m43m34 - m31 * m23m44_m43m24 + m41 * m23m34_m33m24) +
+			          m13 * (m24 * m31m42_m41m32 - m34 * m21m42_m41m22 + m44 * m21m32_m31m22) -
+			          m14 * (m23 * m31m42_m41m32 - m33 * m21m42_m41m22 + m43 * m21m32_m31m22);
 			return det;
 		},
 
@@ -76,7 +76,7 @@ this.createjs = this.createjs || {};
 	* @property rawData
 	* @type Float32Array
 	**/
-	p.rawData;
+	p.rawData = null;
 
 	/**
 	*
@@ -85,7 +85,9 @@ this.createjs = this.createjs || {};
 	* <pre><code></code></pre>
 	**/
 	p.identity = function() {
-		this.rawData = new Float32Array([1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]);
+		var d = this.rawData;
+		d[0] = d[5] = d[10] = d[15] = 1;
+		d[1] = d[2] = d[3] = d[4] = d[6] = d[7] = d[8] = d[9] = d[11] = d[12] = d[13] = d[14] = 0;
 	};
 
 	/**
@@ -180,15 +182,15 @@ this.createjs = this.createjs || {};
 			ty = pivotPoint.y;
 			tz = pivotPoint.z;
 		}
-		var radian = degrees * createjs.Matrix2D.DEG_TO_RAD;
+		var radian = degrees * Matrix3D.DEG_TO_RAD;
 		var cos = Math.cos(radian);
 		var sin = Math.sin(radian);
 		if (axis.equals(createjs.Vector3D.X_AXIS)) {
-			this.append(new Matrix3D([1, 0, 0, 0, 0, cos, sin, 0, 0, -sin, cos, 0, tx, ty, tz, 1]));
+			this.append(new Matrix3D([1, 0, 0, 0, 0, cos, -sin, 0, 0, sin, cos, 0, tx, ty, tz, 1]));
 		} else if (axis.equals(createjs.Vector3D.Y_AXIS)) {
-			this.append(new Matrix3D([cos, 0, -sin, 0, 0, 1, 0, 0, sin, 0, cos, 0, tx, ty, tz, 1]));
+			this.append(new Matrix3D([cos, 0, sin, 0, 0, 1, 0, 0, -sin, 0, cos, 0, tx, ty, tz, 1]));
 		} else if (axis.equals(createjs.Vector3D.Z_AXIS)) {
-			this.append(new Matrix3D([cos, sin, 0, 0, -sin, cos, 0, 0, 0, 0, 1, 0, tx, ty, tz, 1]));
+			this.append(new Matrix3D([cos, -sin, 0, 0, sin, cos, 0, 0, 0, 0, 1, 0, tx, ty, tz, 1]));
 		}
 	};
 	*/
@@ -211,15 +213,15 @@ this.createjs = this.createjs || {};
 			ty = pivotPoint.y;
 			tz = pivotPoint.z;
 		}
-		var radian = degrees * createjs.Matrix2D.DEG_TO_RAD;
+		var radian = degrees * Matrix3D.DEG_TO_RAD;
 		var cos = Math.cos(radian);
 		var sin = Math.sin(radian);
 		if (axis.equals(createjs.Vector3D.X_AXIS)) {
-			this.prepend(new Matrix3D([1, 0, 0, 0, 0, cos, sin, 0, 0, -sin, cos, 0, tx, ty, tz, 1]));
+			this.prepend(new Matrix3D([1, 0, 0, 0, 0, cos, -sin, 0, 0, sin, cos, 0, tx, ty, tz, 1]));
 		} else if (axis.equals(createjs.Vector3D.Y_AXIS)) {
-			this.prepend(new Matrix3D([cos, 0, -sin, 0, 0, 1, 0, 0, sin, 0, cos, 0, tx, ty, tz, 1]));
+			this.prepend(new Matrix3D([cos, 0, sin, 0, 0, 1, 0, 0, -sin, 0, cos, 0, tx, ty, tz, 1]));
 		} else if (axis.equals(createjs.Vector3D.Z_AXIS)) {
-			this.prepend(new Matrix3D([cos, sin, 0, 0, -sin, cos, 0, 0, 0, 0, 1, 0, tx, ty, tz, 1]));
+			this.prepend(new Matrix3D([cos, -sin, 0, 0, sin, cos, 0, 0, 0, 0, 1, 0, tx, ty, tz, 1]));
 		}
 	};
 	*/
@@ -273,8 +275,8 @@ this.createjs = this.createjs || {};
 	p.transformVectors = function(vin, vout) {
 		var d = this.rawData;
 		var d11 = d[0],  d12 = d[4],  d13 = d[8],  d14 = d[12],
-				d21 = d[1],  d22 = d[5],  d23 = d[9],  d24 = d[13],
-				d31 = d[2],  d32 = d[6],  d33 = d[10], d34 = d[14];
+		    d21 = d[1],  d22 = d[5],  d23 = d[9],  d24 = d[13],
+		    d31 = d[2],  d32 = d[6],  d33 = d[10], d34 = d[14];
 
 		var x, y, z;
 		for (var i = 0, l = vin.length; i < l; i += 3) {
@@ -297,7 +299,11 @@ this.createjs = this.createjs || {};
 	* <pre><code></code></pre>
 	**/
 	p.copyFrom = function(sourceMatrix3D) {
-		this.rawData = new Float32Array(sourceMatrix3D.rawData);
+		var d = this.rawData;
+		var s = sourceMatrix3D.rawData;
+		for (var i = 0; i < 16; i++) {
+			d[i] = s[i];
+		}
 	};
 
 	/**
@@ -308,7 +314,11 @@ this.createjs = this.createjs || {};
 	* <pre><code></code></pre>
 	**/
 	p.copyToMatrix3D = function(dest) {
-		dest.rawData = new Float32Array(this.rawData);
+		var d = dest.rawData;
+		var s = this.rawData;
+		for (var i = 0; i < 16; i++) {
+			d[i] = s[i];
+		}
 	};
 
 	/**
@@ -463,29 +473,29 @@ this.createjs = this.createjs || {};
 	p.invert = function() {
 		var rd = this.rawData;
 		var m11 = rd[0],  m12 = rd[4],  m13 = rd[8],  m14 = rd[12],
-				m21 = rd[1],  m22 = rd[5],  m23 = rd[9],  m24 = rd[13],
-				m31 = rd[2],  m32 = rd[6],  m33 = rd[10], m34 = rd[14],
-				m41 = rd[3],  m42 = rd[7],  m43 = rd[11], m44 = rd[15];
+		    m21 = rd[1],  m22 = rd[5],  m23 = rd[9],  m24 = rd[13],
+		    m31 = rd[2],  m32 = rd[6],  m33 = rd[10], m34 = rd[14],
+		    m41 = rd[3],  m42 = rd[7],  m43 = rd[11], m44 = rd[15];
 		var m33m44_m43m34 = m33 * m44 - m43 * m34,
-				m23m44_m43m24 = m23 * m44 - m43 * m24,
-				m23m34_m33m24 = m23 * m34 - m33 * m24,
-				m31m42_m41m32 = m31 * m42 - m41 * m32,
-				m21m42_m41m22 = m21 * m42 - m41 * m22,
-				m21m32_m31m22 = m21 * m32 - m31 * m22;
+		    m23m44_m43m24 = m23 * m44 - m43 * m24,
+		    m23m34_m33m24 = m23 * m34 - m33 * m24,
+		    m31m42_m41m32 = m31 * m42 - m41 * m32,
+		    m21m42_m41m22 = m21 * m42 - m41 * m22,
+		    m21m32_m31m22 = m21 * m32 - m31 * m22;
 		var det = m11 * (m22 * m33m44_m43m34 - m32 * m23m44_m43m24 + m42 * m23m34_m33m24) -
-							m12 * (m21 * m33m44_m43m34 - m31 * m23m44_m43m24 + m41 * m23m34_m33m24) +
-							m13 * (m24 * m31m42_m41m32 - m34 * m21m42_m41m22 + m44 * m21m32_m31m22) -
-							m14 * (m23 * m31m42_m41m32 - m33 * m21m42_m41m22 + m43 * m21m32_m31m22);
+		          m12 * (m21 * m33m44_m43m34 - m31 * m23m44_m43m24 + m41 * m23m34_m33m24) +
+		          m13 * (m24 * m31m42_m41m32 - m34 * m21m42_m41m22 + m44 * m21m32_m31m22) -
+		          m14 * (m23 * m31m42_m41m32 - m33 * m21m42_m41m22 + m43 * m21m32_m31m22);
 		if (det === 0) {
 			return false;
 		}
 		var ad = 1 / det;
 		var m13m44_m43m14 = m13 * m44 - m43 * m14,
-				m13m34_m33m14 = m13 * m34 - m33 * m14,
-				m11m42_m41m12 = m11 * m42 - m41 * m12,
-				m11m32_m31m12 = m11 * m32 - m31 * m12,
-				m13m24_m23m14 = m13 * m24 - m23 * m14,
-				m11m22_m21m12 = m11 * m22 - m21 * m12;
+		    m13m34_m33m14 = m13 * m34 - m33 * m14,
+		    m11m42_m41m12 = m11 * m42 - m41 * m12,
+		    m11m32_m31m12 = m11 * m32 - m31 * m12,
+		    m13m24_m23m14 = m13 * m24 - m23 * m14,
+		    m11m22_m21m12 = m11 * m22 - m21 * m12;
 		rd[0]  = (m22 * (m33m44_m43m34) - m32 * (m23m44_m43m24) + m42 * (m23m34_m33m24)) * ad;
 		rd[1]  = (m21 * (m33m44_m43m34) - m31 * (m23m44_m43m24) + m41 * (m23m34_m33m24)) * -ad;
 		rd[2]  = (m24 * (m31m42_m41m32) - m34 * (m21m42_m41m22) + m44 * (m21m32_m31m22)) * ad;
@@ -523,6 +533,15 @@ this.createjs = this.createjs || {};
 		return "[Matrix3D [" + Array.prototype.slice.call(this.rawData).toString() + "]]";
 	};
 
+	/**
+	*
+	* @static
+	* @property DEG_TO_RAD
+	* @type {Number}
+	* @default Math.PI / 180
+	**/
+	s.DEG_TO_RAD = Math.PI / 180;
+
 
 
 
@@ -535,14 +554,14 @@ this.createjs = this.createjs || {};
 	function multiplication(m1, m2) {
 		var rd1 = m1.rawData;
 		var a11 = rd1[0],  a12 = rd1[4],  a13 = rd1[8],  a14 = rd1[12],
-				a21 = rd1[1],  a22 = rd1[5],  a23 = rd1[9],  a24 = rd1[13],
-				a31 = rd1[2],  a32 = rd1[6],  a33 = rd1[10], a34 = rd1[14],
-				a41 = rd1[3],  a42 = rd1[7],  a43 = rd1[11], a44 = rd1[15];
+		    a21 = rd1[1],  a22 = rd1[5],  a23 = rd1[9],  a24 = rd1[13],
+		    a31 = rd1[2],  a32 = rd1[6],  a33 = rd1[10], a34 = rd1[14],
+		    a41 = rd1[3],  a42 = rd1[7],  a43 = rd1[11], a44 = rd1[15];
 		var rd2 = m2.rawData;
 		var b11 = rd2[0],  b12 = rd2[4],  b13 = rd2[8],  b14 = rd2[12],
-				b21 = rd2[1],  b22 = rd2[5],  b23 = rd2[9],  b24 = rd2[13],
-				b31 = rd2[2],  b32 = rd2[6],  b33 = rd2[10], b34 = rd2[14],
-				b41 = rd2[3],  b42 = rd2[7],  b43 = rd2[11], b44 = rd2[15];
+		    b21 = rd2[1],  b22 = rd2[5],  b23 = rd2[9],  b24 = rd2[13],
+		    b31 = rd2[2],  b32 = rd2[6],  b33 = rd2[10], b34 = rd2[14],
+		    b41 = rd2[3],  b42 = rd2[7],  b43 = rd2[11], b44 = rd2[15];
 		var d = this.rawData;
 		d[0]  = a11 * b11 + a12 * b21 + a13 * b31 + a14 * b41;
 		d[1]  = a21 * b11 + a22 * b21 + a23 * b31 + a24 * b41;
