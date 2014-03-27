@@ -122,9 +122,9 @@ this.createjs = this.createjs || {};
 	* <pre><code></code></pre>
 	**/
 	p.appendTranslation = function(x, y, z) {
-		x = x | 0;
-		y = y | 0;
-		z = z | 0;
+		x = x || 0;
+		y = y || 0;
+		z = z || 0;
 		var d = this.rawData;
 		var m41 = d[3], m42 = d[7], m43 = d[11], m44 = d[15];
 		if (x !== 0) {
@@ -157,9 +157,9 @@ this.createjs = this.createjs || {};
 	* <pre><code></code></pre>
 	**/
 	p.prependTranslation = function(x, y, z) {
-		x = x | 0;
-		y = y | 0;
-		z = z | 0;
+		x = x || 0;
+		y = y || 0;
+		z = z || 0;
 		var d = this.rawData;
 		var m11 = d[0],  m12 = d[4],  m13 = d[8],  m14 = d[12],
 		    m21 = d[1],  m22 = d[5],  m23 = d[9],  m24 = d[13],
