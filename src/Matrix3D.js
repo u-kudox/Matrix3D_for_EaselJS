@@ -116,38 +116,50 @@ this.createjs = this.createjs || {};
 	*
 	* @method appendTranslation
 	* @param x {Number}
-	* @param y {Number}
-	* @param z {Number}
+	* @param [y=0] {Number}
+	* @param [z=0] {Number}
 	* @example
 	* <pre><code></code></pre>
 	**/
 	p.appendTranslation = function(x, y, z) {
+		x = x | 0;
+		y = y | 0;
+		z = z | 0;
 		var d = this.rawData;
 		var m41 = d[3], m42 = d[7], m43 = d[11], m44 = d[15];
-		d[0]  += x * m41;
-		d[1]  += y * m41;
-		d[2]  += z * m41;
-		d[4]  += x * m42;
-		d[5]  += y * m42;
-		d[6]  += z * m42;
-		d[8]  += x * m43;
-		d[9]  += y * m43;
-		d[10] += z * m43;
-		d[12] += x * m44;
-		d[13] += y * m44;
-		d[14] += z * m44;
+		if (x !== 0) {
+			d[0]  += x * m41;
+			d[4]  += x * m42;
+			d[8]  += x * m43;
+			d[12] += x * m44;
+		}
+		if (y !== 0) {
+			d[1]  += y * m41;
+			d[5]  += y * m42;
+			d[9]  += y * m43;
+			d[13] += y * m44;
+		}
+		if (z !== 0) {
+			d[2]  += z * m41;
+			d[6]  += z * m42;
+			d[10] += z * m43;
+			d[14] += z * m44;
+		}
 	};
 
 	/**
 	*
 	* @method prependTranslation
 	* @param x {Number}
-	* @param y {Number}
-	* @param z {Number}
+	* @param [y=0] {Number}
+	* @param [z=0] {Number}
 	* @example
 	* <pre><code></code></pre>
 	**/
 	p.prependTranslation = function(x, y, z) {
+		x = x | 0;
+		y = y | 0;
+		z = z | 0;
 		var d = this.rawData;
 		var m11 = d[0],  m12 = d[4],  m13 = d[8],  m14 = d[12],
 		    m21 = d[1],  m22 = d[5],  m23 = d[9],  m24 = d[13],
@@ -163,26 +175,62 @@ this.createjs = this.createjs || {};
 	*
 	* @method appendScale
 	* @param xScale {Number}
-	* @param yScale {Number}
-	* @param zScale {Number}
+	* @param [yScale=NaN] {Number}
+	* @param [zScale=NaN] {Number}
 	* @example
 	* <pre><code></code></pre>
 	**/
 	p.appendScale = function(xScale, yScale, zScale) {
-		this.append(new Matrix3D([xScale, 0, 0, 0, 0, yScale, 0, 0, 0, 0, zScale, 0, 0, 0, 0, 1]));
+		var d = this.rawData;
+		if (!isNaN(xScale) && xScale !== 1) {
+			d[0]  *= xScale;
+			d[4]  *= xScale;
+			d[8]  *= xScale;
+			d[12] *= xScale;
+		}
+		if (!isNaN(yScale) && yScale !== 1) {
+			d[1]  *= yScale;
+			d[5]  *= yScale;
+			d[9]  *= yScale;
+			d[13] *= yScale;
+		}
+		if (!isNaN(zScale) && zScale !== 1) {
+			d[2]  *= zScale;
+			d[6]  *= zScale;
+			d[10] *= zScale;
+			d[14] *= zScale;
+		}
 	};
 
 	/**
 	*
 	* @method prependScale
 	* @param xScale {Number}
-	* @param yScale {Number}
-	* @param zScale {Number}
+	* @param [yScale=NaN] {Number}
+	* @param [zScale=NaN] {Number}
 	* @example
 	* <pre><code></code></pre>
 	**/
 	p.prependScale = function(xScale, yScale, zScale) {
-		this.prepend(new Matrix3D([xScale, 0, 0, 0, 0, yScale, 0, 0, 0, 0, zScale, 0, 0, 0, 0, 1]));
+		var d = this.rawData;
+		if (!isNaN(xScale) && xScale !== 1) {
+			d[0]  *= xScale;
+			d[1]  *= xScale;
+			d[2]  *= xScale;
+			d[3]  *= xScale;
+		}
+		if (!isNaN(yScale) && yScale !== 1) {
+			d[4]  *= yScale;
+			d[5]  *= yScale;
+			d[6]  *= yScale;
+			d[7]  *= yScale;
+		}
+		if (!isNaN(zScale) && zScale !== 1) {
+			d[8]  *= zScale;
+			d[9]  *= zScale;
+			d[10] *= zScale;
+			d[11] *= zScale;
+		}
 	};
 
 	/**
