@@ -122,7 +122,20 @@ this.createjs = this.createjs || {};
 	* <pre><code></code></pre>
 	**/
 	p.appendTranslation = function(x, y, z) {
-		this.append(new Matrix3D([1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, x, y, z, 1]));
+		var d = this.rawData;
+		var m41 = d[3], m42 = d[7], m43 = d[11], m44 = d[15];
+		d[0]  += x * m41;
+		d[1]  += y * m41;
+		d[2]  += z * m41;
+		d[4]  += x * m42;
+		d[5]  += y * m42;
+		d[6]  += z * m42;
+		d[8]  += x * m43;
+		d[9]  += y * m43;
+		d[10] += z * m43;
+		d[12] += x * m44;
+		d[13] += y * m44;
+		d[14] += z * m44;
 	};
 
 	/**
@@ -135,7 +148,15 @@ this.createjs = this.createjs || {};
 	* <pre><code></code></pre>
 	**/
 	p.prependTranslation = function(x, y, z) {
-		this.prepend(new Matrix3D([1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, x, y, z, 1]));
+		var d = this.rawData;
+		var m11 = d[0],  m12 = d[4],  m13 = d[8],  m14 = d[12],
+		    m21 = d[1],  m22 = d[5],  m23 = d[9],  m24 = d[13],
+		    m31 = d[2],  m32 = d[6],  m33 = d[10], m34 = d[14],
+		    m41 = d[3],  m42 = d[7],  m43 = d[11], m44 = d[15];
+		d[12] += m11 * x + m12 * y + m13 * z;
+		d[13] += m21 * x + m22 * y + m23 * z;
+		d[14] += m31 * x + m32 * y + m33 * z;
+		d[15] += m41 * x + m42 * y + m43 * z;
 	};
 
 	/**
