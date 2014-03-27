@@ -40,7 +40,7 @@ module.exports = function(grunt) {
 				overwrite : true,
 				replacements : [{
 					from : /js\/vector3d-.+min\.js/,
-					to : 'js/vector3d-1.1.0.min.js'
+					to : 'js/vector3d-1.2.0.min.js'
 				}]
 			}
 		}
