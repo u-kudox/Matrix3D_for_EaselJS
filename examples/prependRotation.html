@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>appendRotation | Matrix3D for EaselJS</title>
+<title>prependRotation | Matrix3D for EaselJS</title>
 <link rel="stylesheet" type="text/css" href="css/style.css" media="all">
 <script type="text/javascript" src="http://code.createjs.com/easeljs-0.7.1.min.js"></script>
 <script type="text/javascript" src="js/vector3d-1.2.0.min.js"></script>
@@ -12,28 +12,28 @@
 (function(window) {
 
 	var m1 = new createjs.Matrix3D();
-	m1.appendRotation(30, createjs.Vector3D.X_AXIS);
+	m1.prependRotation(30, createjs.Vector3D.X_AXIS);
 	console.log(m1.toString()); // [Matrix3D [1,0,0,0,0,0.8660253882408142,0.5,0,0,-0.5,0.8660253882408142,0,0,0,0,1]]
 
 	var m2 = new createjs.Matrix3D();
-	m2.appendRotation(-45, createjs.Vector3D.Y_AXIS, new createjs.Vector3D(10, 20, 0));
+	m2.prependRotation(-45, createjs.Vector3D.Y_AXIS, new createjs.Vector3D(10, 20, 0));
 	console.log(m2.toString()); // [Matrix3D [0.7071067690849304,0,0.7071067690849304,0,0,1,0,0,-0.7071067690849304,0,0.7071067690849304,0,2.9289321899414062,0,-7.071067810058594,1]]
 
 	var m3 = new createjs.Matrix3D();
-	m3.appendRotation(90, new createjs.Vector3D(1, 2, 3), new createjs.Vector3D(0, 0, 10));
+	m3.prependRotation(90, new createjs.Vector3D(1, 2, 3), new createjs.Vector3D(0, 0, 10));
 	console.log(m3.toString()); // [Matrix3D [0.0714285746216774,0.9446408748626709,-0.32023677229881287,0,-0.6589266061782837,0.2857142984867096,0.6958326697349548,0,0.7488082051277161,0.16131018102169037,0.6428571343421936,0,-7.488081932067871,-1.613101840019226,3.5714285373687744,1]]
 
 	var m4 = new createjs.Matrix3D();
-	m4.appendTranslation(100, 50, 25);
-	m4.appendScale(2, 2, 1);
-	m4.appendRotation(120, createjs.Vector3D.Z_AXIS);
-	console.log(m4.toString()); // [Matrix3D [-1,1.7320507764816284,0,0,-1.7320507764816284,-1,0,0,0,0,1,0,-186.6025390625,123.205078125,25,1]]
+	m4.prependTranslation(100, 50, 25);
+	m4.prependScale(2, 2, 1);
+	m4.prependRotation(120, createjs.Vector3D.Z_AXIS);
+	console.log(m4.toString()); // [Matrix3D [-1,1.7320507764816284,0,0,-1.7320507764816284,-1,0,0,0,0,1,0,100,50,25,1]]
 
 	var m5 = new createjs.Matrix3D();
-	m5.appendRotation(-70, createjs.Vector3D.X_AXIS, new createjs.Vector3D(0, 10, 20));
-	m5.appendScale(1, 2, 3);
-	m5.appendTranslation(0, 50, 100);
-	console.log(m5.toString()); // [Matrix3D [1,0,0,0,0,0.6840403079986572,-2.819077968597412,0,0,1.879385232925415,1.0260604619979858,0,0,25.57189178466797,167.66957092285156,1]]
+	m5.prependRotation(-70, createjs.Vector3D.X_AXIS, new createjs.Vector3D(0, 10, 20));
+	m5.prependScale(1, 2, 3);
+	m5.prependTranslation(0, 50, 100);
+	console.log(m5.toString()); // [Matrix3D [1,0,0,0,0,0.6840403079986572,-1.879385232925415,0,0,2.819077968597412,1.0260604619979858,0,0,303.895751953125,31.193309783935547,1]]
 
 }(window));
 </script>

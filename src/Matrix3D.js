@@ -260,46 +260,38 @@ this.createjs = this.createjs || {};
 		var radian = degrees * Matrix3D.DEG_TO_RAD;
 		var cos = Math.cos(radian);
 		var sin = Math.sin(radian);
-		if (axis.equals(createjs.Vector3D.X_AXIS)) {
-			this.append(new Matrix3D([1, 0, 0, 0, 0, cos, -sin, 0, 0, sin, cos, 0, tx, ty, tz, 1]));
-		} else if (axis.equals(createjs.Vector3D.Y_AXIS)) {
-			this.append(new Matrix3D([cos, 0, sin, 0, 0, 1, 0, 0, -sin, 0, cos, 0, tx, ty, tz, 1]));
-		} else if (axis.equals(createjs.Vector3D.Z_AXIS)) {
-			this.append(new Matrix3D([cos, -sin, 0, 0, sin, cos, 0, 0, 0, 0, 1, 0, tx, ty, tz, 1]));
-		} else {
-			var x = axis.x;
-			var y = axis.y;
-			var z = axis.z;
-			var x2 = x * x;
-			var y2 = y * y;
-			var z2 = z * z;
-			var ls = x2 + y2 + z2;
-			if (ls !== 0) {
-				var l = Math.sqrt(ls);
-				x /= l;
-				y /= l;
-				z /= l;
-				x2 /= ls;
-				y2 /= ls;
-				z2 /= ls;
-			}
-			var ccos = 1 - cos;
-			var m = new Matrix3D();
-			var d = m.rawData;
-			d[0]  = x2 + (y2 + z2) * cos;
-			d[1]  = x * y * ccos + z * sin;
-			d[2]  = x * z * ccos - y * sin;
-			d[4]  = x * y * ccos - z * sin;
-			d[5]  = y2 + (x2 + z2) * cos;
-			d[6]  = y * z * ccos + x * sin;
-			d[8]  = x * z * ccos + y * sin;
-			d[9]  = y * z * ccos - x * sin;
-			d[10] = z2 + (x2 + y2) * cos;
-			d[12] = (tx * (y2 + z2) - x * (ty * y + tz * z)) * ccos + (ty * z - tz * y) * sin;
-			d[13] = (ty * (x2 + z2) - y * (tx * x + tz * z)) * ccos + (tz * x - tx * z) * sin;
-			d[14] = (tz * (x2 + y2) - z * (tx * x + ty * y)) * ccos + (tx * y - ty * x) * sin;
-			this.append(m);
+		var x = axis.x;
+		var y = axis.y;
+		var z = axis.z;
+		var x2 = x * x;
+		var y2 = y * y;
+		var z2 = z * z;
+		var ls = x2 + y2 + z2;
+		if (ls !== 0) {
+			var l = Math.sqrt(ls);
+			x /= l;
+			y /= l;
+			z /= l;
+			x2 /= ls;
+			y2 /= ls;
+			z2 /= ls;
 		}
+		var ccos = 1 - cos;
+		var m = new Matrix3D();
+		var d = m.rawData;
+		d[0]  = x2 + (y2 + z2) * cos;
+		d[1]  = x * y * ccos + z * sin;
+		d[2]  = x * z * ccos - y * sin;
+		d[4]  = x * y * ccos - z * sin;
+		d[5]  = y2 + (x2 + z2) * cos;
+		d[6]  = y * z * ccos + x * sin;
+		d[8]  = x * z * ccos + y * sin;
+		d[9]  = y * z * ccos - x * sin;
+		d[10] = z2 + (x2 + y2) * cos;
+		d[12] = (tx * (y2 + z2) - x * (ty * y + tz * z)) * ccos + (ty * z - tz * y) * sin;
+		d[13] = (ty * (x2 + z2) - y * (tx * x + tz * z)) * ccos + (tz * x - tx * z) * sin;
+		d[14] = (tz * (x2 + y2) - z * (tx * x + ty * y)) * ccos + (tx * y - ty * x) * sin;
+		this.append(m);
 	};
 
 	/**
@@ -322,46 +314,38 @@ this.createjs = this.createjs || {};
 		var radian = degrees * Matrix3D.DEG_TO_RAD;
 		var cos = Math.cos(radian);
 		var sin = Math.sin(radian);
-		if (axis.equals(createjs.Vector3D.X_AXIS)) {
-			this.prepend(new Matrix3D([1, 0, 0, 0, 0, cos, -sin, 0, 0, sin, cos, 0, tx, ty, tz, 1]));
-		} else if (axis.equals(createjs.Vector3D.Y_AXIS)) {
-			this.prepend(new Matrix3D([cos, 0, sin, 0, 0, 1, 0, 0, -sin, 0, cos, 0, tx, ty, tz, 1]));
-		} else if (axis.equals(createjs.Vector3D.Z_AXIS)) {
-			this.prepend(new Matrix3D([cos, -sin, 0, 0, sin, cos, 0, 0, 0, 0, 1, 0, tx, ty, tz, 1]));
-		} else {
-			var x = axis.x;
-			var y = axis.y;
-			var z = axis.z;
-			var x2 = x * x;
-			var y2 = y * y;
-			var z2 = z * z;
-			var ls = x2 + y2 + z2;
-			if (ls !== 0) {
-				var l = Math.sqrt(ls);
-				x /= l;
-				y /= l;
-				z /= l;
-				x2 /= ls;
-				y2 /= ls;
-				z2 /= ls;
-			}
-			var ccos = 1 - cos;
-			var m = new Matrix3D();
-			var d = m.rawData;
-			d[0]  = x2 + (y2 + z2) * cos;
-			d[1]  = x * y * ccos + z * sin;
-			d[2]  = x * z * ccos - y * sin;
-			d[4]  = x * y * ccos - z * sin;
-			d[5]  = y2 + (x2 + z2) * cos;
-			d[6]  = y * z * ccos + x * sin;
-			d[8]  = x * z * ccos + y * sin;
-			d[9]  = y * z * ccos - x * sin;
-			d[10] = z2 + (x2 + y2) * cos;
-			d[12] = (tx * (y2 + z2) - x * (ty * y + tz * z)) * ccos + (ty * z - tz * y) * sin;
-			d[13] = (ty * (x2 + z2) - y * (tx * x + tz * z)) * ccos + (tz * x - tx * z) * sin;
-			d[14] = (tz * (x2 + y2) - z * (tx * x + ty * y)) * ccos + (tx * y - ty * x) * sin;
-			this.prepend(m);
+		var x = axis.x;
+		var y = axis.y;
+		var z = axis.z;
+		var x2 = x * x;
+		var y2 = y * y;
+		var z2 = z * z;
+		var ls = x2 + y2 + z2;
+		if (ls !== 0) {
+			var l = Math.sqrt(ls);
+			x /= l;
+			y /= l;
+			z /= l;
+			x2 /= ls;
+			y2 /= ls;
+			z2 /= ls;
 		}
+		var ccos = 1 - cos;
+		var m = new Matrix3D();
+		var d = m.rawData;
+		d[0]  = x2 + (y2 + z2) * cos;
+		d[1]  = x * y * ccos + z * sin;
+		d[2]  = x * z * ccos - y * sin;
+		d[4]  = x * y * ccos - z * sin;
+		d[5]  = y2 + (x2 + z2) * cos;
+		d[6]  = y * z * ccos + x * sin;
+		d[8]  = x * z * ccos + y * sin;
+		d[9]  = y * z * ccos - x * sin;
+		d[10] = z2 + (x2 + y2) * cos;
+		d[12] = (tx * (y2 + z2) - x * (ty * y + tz * z)) * ccos + (ty * z - tz * y) * sin;
+		d[13] = (ty * (x2 + z2) - y * (tx * x + tz * z)) * ccos + (tz * x - tx * z) * sin;
+		d[14] = (tz * (x2 + y2) - z * (tx * x + ty * y)) * ccos + (tx * y - ty * x) * sin;
+		this.prepend(m);
 	};
 
 	/**
