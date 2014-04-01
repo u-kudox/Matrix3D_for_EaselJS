@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>copyRowFrom | Matrix3D for EaselJS</title>
+<title>appendScale | Matrix3D for EaselJS</title>
 <link rel="stylesheet" type="text/css" href="css/style.css" media="all">
 <script type="text/javascript" src="http://code.createjs.com/easeljs-0.7.1.min.js"></script>
 <script type="text/javascript" src="js/vector3d-1.2.0.min.js"></script>
@@ -12,10 +12,18 @@
 (function(window) {
 
 	var m1 = new createjs.Matrix3D();
-	console.log(m1.toString()); // [Matrix3D [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]]
-	var v1 = new createjs.Vector3D(10, 20, 30, 40);
-	m1.copyRowFrom(0, v1);
-	console.log(m1.toString()); // [Matrix3D [10,0,0,0,20,1,0,0,30,0,1,0,40,0,0,1]]
+	m1.appendScale(2, 3, 4);
+	console.log(m1.toString()); // [Matrix3D [2,0,0,0,0,3,0,0,0,0,4,0,0,0,0,1]]
+
+	var m2 = new createjs.Matrix3D();
+	m2.appendTranslation(10, 10, 10);
+	m2.appendScale(2, 3, 4);
+	console.log(m2.toString()); // [Matrix3D [2,0,0,0,0,3,0,0,0,0,4,0,20,30,40,1]]
+
+	var m3 = new createjs.Matrix3D();
+	m3.appendScale(2, 3, 4);
+	m3.appendTranslation(10, 10, 10);
+	console.log(m3.toString()); // [Matrix3D [2,0,0,0,0,3,0,0,0,0,4,0,10,10,10,1]]
 
 }(window));
 </script>

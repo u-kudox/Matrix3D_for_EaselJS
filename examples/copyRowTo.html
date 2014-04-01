@@ -12,7 +12,7 @@
 (function(window) {
 
 	var m1 = new createjs.Matrix3D([10, 0, 0, 0, 20, 1, 0, 0, 30, 0, 1, 0, 40, 0, 0, 1]);
-	console.log(m1.toString()); // [Matrix3D [10, 0, 0, 0, 20, 1, 0, 0, 30, 0, 1, 0, 40, 0, 0, 1]]
+	console.log(m1.toString()); // [Matrix3D [10,0,0,0,20,1,0,0,30,0,1,0,40,0,0,1]]
 	var v1 = new createjs.Vector3D();
 	m1.copyRowTo(0, v1);
 	console.log(v1.x + ", " + v1.y + ", " + v1.z + ", " + v1.w); // 10, 20, 30, 40

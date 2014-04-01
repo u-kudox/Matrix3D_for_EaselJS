@@ -13,8 +13,17 @@
 
 	var m1 = new createjs.Matrix3D();
 	m1.prependScale(2, 3, 4);
-	m1.prependTranslation(10, 10, 10);
-	console.log(m1.toString());
+	console.log(m1.toString()); // [Matrix3D [2,0,0,0,0,3,0,0,0,0,4,0,0,0,0,1]]
+
+	var m2 = new createjs.Matrix3D();
+	m2.prependTranslation(10, 10, 10);
+	m2.prependScale(2, 3, 4);
+	console.log(m2.toString()); // [Matrix3D [2,0,0,0,0,3,0,0,0,0,4,0,10,10,10,1]]
+
+	var m3 = new createjs.Matrix3D();
+	m3.prependScale(2, 3, 4);
+	m3.prependTranslation(10, 10, 10);
+	console.log(m3.toString()); // [Matrix3D [2,0,0,0,0,3,0,0,0,0,4,0,20,30,40,1]]
 
 }(window));
 </script>
