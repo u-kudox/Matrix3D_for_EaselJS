@@ -1,6 +1,6 @@
 /**
  * Matrix3D for EaselJS
- * Version: 0.60
+ * Version: 0.70
  * Contact and bug reports : http://kudox.jp/contact or http://twitter.com/u_kudox
  * License : public domain
  **/
@@ -694,5 +694,40 @@ this.createjs = this.createjs || {};
 		d[15] = a41 * b14 + a42 * b24 + a43 * b34 + a44 * b44;
 	}
 
+	/**
+	*
+	* @static
+	* @class Orientation3D
+	**/
+	var Orientation3D = {
+		/**
+		*
+		* @static
+		* @property AXIS_ANGLE
+		* @type String
+		* @default "axisAngle"
+		**/
+		AXIS_ANGLE : "axisAngle",
+
+		/**
+		*
+		* @static
+		* @property EULER_ANGLES
+		* @type String
+		* @default "eulerAngles"
+		**/
+		EULER_ANGLES : "eulerAngles",
+
+		/**
+		*
+		* @static
+		* @property QUATERNION
+		* @type String
+		* @default "quaternion"
+		**/
+		QUATERNION : "quaternion"
+	};
+
 	createjs.Matrix3D = Matrix3D;
+	createjs.Orientation3D = Orientation3D;
 }(window));
