@@ -1,6 +1,6 @@
 /**
  * Matrix3D for EaselJS
- * Version: 0.50
+ * Version: 0.60
  * Contact and bug reports : http://kudox.jp/contact or http://twitter.com/u_kudox
  * License : public domain
  **/
@@ -87,18 +87,6 @@ this.createjs = this.createjs || {};
 
 	/**
 	*
-	* @method identity
-	* @example
-	* <pre><code></code></pre>
-	**/
-	p.identity = function() {
-		var d = this.rawData;
-		d[0] = d[5] = d[10] = d[15] = 1;
-		d[1] = d[2] = d[3] = d[4] = d[6] = d[7] = d[8] = d[9] = d[11] = d[12] = d[13] = d[14] = 0;
-	};
-
-	/**
-	*
 	* @method append
 	* @param lhs {Matrix3D}
 	* @example
@@ -106,138 +94,6 @@ this.createjs = this.createjs || {};
 	**/
 	p.append = function(lhs) {
 		multiplication.call(this, lhs, this);
-	};
-
-	/**
-	*
-	* @method prepend
-	* @param rhs {Matrix3D}
-	* @example
-	* <pre><code></code></pre>
-	**/
-	p.prepend = function(rhs) {
-		multiplication.call(this, this, rhs);
-	};
-
-	/**
-	*
-	* @method appendTranslation
-	* @param x {Number}
-	* @param [y=0] {Number}
-	* @param [z=0] {Number}
-	* @example
-	* <pre><code></code></pre>
-	**/
-	p.appendTranslation = function(x, y, z) {
-		x = x || 0;
-		y = y || 0;
-		z = z || 0;
-		var d = this.rawData;
-		var m41 = d[3], m42 = d[7], m43 = d[11], m44 = d[15];
-		if (x !== 0) {
-			d[0]  += x * m41;
-			d[4]  += x * m42;
-			d[8]  += x * m43;
-			d[12] += x * m44;
-		}
-		if (y !== 0) {
-			d[1]  += y * m41;
-			d[5]  += y * m42;
-			d[9]  += y * m43;
-			d[13] += y * m44;
-		}
-		if (z !== 0) {
-			d[2]  += z * m41;
-			d[6]  += z * m42;
-			d[10] += z * m43;
-			d[14] += z * m44;
-		}
-	};
-
-	/**
-	*
-	* @method prependTranslation
-	* @param x {Number}
-	* @param [y=0] {Number}
-	* @param [z=0] {Number}
-	* @example
-	* <pre><code></code></pre>
-	**/
-	p.prependTranslation = function(x, y, z) {
-		x = x || 0;
-		y = y || 0;
-		z = z || 0;
-		var d = this.rawData;
-		var m11 = d[0],  m12 = d[4],  m13 = d[8],  m14 = d[12],
-		    m21 = d[1],  m22 = d[5],  m23 = d[9],  m24 = d[13],
-		    m31 = d[2],  m32 = d[6],  m33 = d[10], m34 = d[14],
-		    m41 = d[3],  m42 = d[7],  m43 = d[11], m44 = d[15];
-		d[12] += m11 * x + m12 * y + m13 * z;
-		d[13] += m21 * x + m22 * y + m23 * z;
-		d[14] += m31 * x + m32 * y + m33 * z;
-		d[15] += m41 * x + m42 * y + m43 * z;
-	};
-
-	/**
-	*
-	* @method appendScale
-	* @param xScale {Number}
-	* @param [yScale=NaN] {Number}
-	* @param [zScale=NaN] {Number}
-	* @example
-	* <pre><code></code></pre>
-	**/
-	p.appendScale = function(xScale, yScale, zScale) {
-		var d = this.rawData;
-		if (!isNaN(xScale) && xScale !== 1) {
-			d[0]  *= xScale;
-			d[4]  *= xScale;
-			d[8]  *= xScale;
-			d[12] *= xScale;
-		}
-		if (!isNaN(yScale) && yScale !== 1) {
-			d[1]  *= yScale;
-			d[5]  *= yScale;
-			d[9]  *= yScale;
-			d[13] *= yScale;
-		}
-		if (!isNaN(zScale) && zScale !== 1) {
-			d[2]  *= zScale;
-			d[6]  *= zScale;
-			d[10] *= zScale;
-			d[14] *= zScale;
-		}
-	};
-
-	/**
-	*
-	* @method prependScale
-	* @param xScale {Number}
-	* @param [yScale=NaN] {Number}
-	* @param [zScale=NaN] {Number}
-	* @example
-	* <pre><code></code></pre>
-	**/
-	p.prependScale = function(xScale, yScale, zScale) {
-		var d = this.rawData;
-		if (!isNaN(xScale) && xScale !== 1) {
-			d[0]  *= xScale;
-			d[1]  *= xScale;
-			d[2]  *= xScale;
-			d[3]  *= xScale;
-		}
-		if (!isNaN(yScale) && yScale !== 1) {
-			d[4]  *= yScale;
-			d[5]  *= yScale;
-			d[6]  *= yScale;
-			d[7]  *= yScale;
-		}
-		if (!isNaN(zScale) && zScale !== 1) {
-			d[8]  *= zScale;
-			d[9]  *= zScale;
-			d[10] *= zScale;
-			d[11] *= zScale;
-		}
 	};
 
 	/**
@@ -296,151 +152,77 @@ this.createjs = this.createjs || {};
 
 	/**
 	*
-	* @method prependRotation
-	* @param degrees {Number}
-	* @param axis {Vector3D}
-	* @param [pivotPoint=null] {Vector3D}
+	* @method appendScale
+	* @param xScale {Number}
+	* @param [yScale=NaN] {Number}
+	* @param [zScale=NaN] {Number}
 	* @example
 	* <pre><code></code></pre>
 	**/
-	p.prependRotation = function(degrees, axis, pivotPoint) {
-		var tx, ty, tz;
-		tx = ty = tz = 0;
-		if (pivotPoint instanceof createjs.Vector3D) {
-			tx = pivotPoint.x;
-			ty = pivotPoint.y;
-			tz = pivotPoint.z;
-		}
-		var radian = degrees * Matrix3D.DEG_TO_RAD;
-		var cos = Math.cos(radian);
-		var sin = Math.sin(radian);
-		var x = axis.x;
-		var y = axis.y;
-		var z = axis.z;
-		var x2 = x * x;
-		var y2 = y * y;
-		var z2 = z * z;
-		var ls = x2 + y2 + z2;
-		if (ls !== 0) {
-			var l = Math.sqrt(ls);
-			x /= l;
-			y /= l;
-			z /= l;
-			x2 /= ls;
-			y2 /= ls;
-			z2 /= ls;
-		}
-		var ccos = 1 - cos;
-		var m = new Matrix3D();
-		var d = m.rawData;
-		d[0]  = x2 + (y2 + z2) * cos;
-		d[1]  = x * y * ccos + z * sin;
-		d[2]  = x * z * ccos - y * sin;
-		d[4]  = x * y * ccos - z * sin;
-		d[5]  = y2 + (x2 + z2) * cos;
-		d[6]  = y * z * ccos + x * sin;
-		d[8]  = x * z * ccos + y * sin;
-		d[9]  = y * z * ccos - x * sin;
-		d[10] = z2 + (x2 + y2) * cos;
-		d[12] = (tx * (y2 + z2) - x * (ty * y + tz * z)) * ccos + (ty * z - tz * y) * sin;
-		d[13] = (ty * (x2 + z2) - y * (tx * x + tz * z)) * ccos + (tz * x - tx * z) * sin;
-		d[14] = (tz * (x2 + y2) - z * (tx * x + ty * y)) * ccos + (tx * y - ty * x) * sin;
-		this.prepend(m);
-	};
-
-	/**
-	*
-	* @method transformVector
-	* @param v {Vector3D}
-	* @return {Vector3D}
-	* @example
-	* <pre><code></code></pre>
-	**/
-	p.transformVector = function(v) {
-		var vx = v.x;
-		var vy = v.y;
-		var vz = v.z;
+	p.appendScale = function(xScale, yScale, zScale) {
 		var d = this.rawData;
-		var x = d[0] * vx + d[4] * vy + d[8] * vz + d[12];
-		var y = d[1] * vx + d[5] * vy + d[9] * vz + d[13];
-		var z = d[2] * vx + d[6] * vy + d[10] * vz + d[14];
-		return new createjs.Vector3D(x, y, z, 1);
-	};
-
-	/**
-	*
-	* @method deltaTransformVector
-	* @param v {Vector3D}
-	* @return {Vector3D}
-	* @example
-	* <pre><code></code></pre>
-	**/
-	p.deltaTransformVector = function(v) {
-		var vx = v.x;
-		var vy = v.y;
-		var vz = v.z;
-		var d = this.rawData;
-		var x = d[0] * vx + d[4] * vy + d[8] * vz;
-		var y = d[1] * vx + d[5] * vy + d[9] * vz;
-		var z = d[2] * vx + d[6] * vy + d[10] * vz;
-		return new createjs.Vector3D(x, y, z);
-	};
-
-	/**
-	*
-	* @method transformVectors
-	* @param vin {Array}
-	* @param vout {Array}
-	* @example
-	* <pre><code></code></pre>
-	**/
-	p.transformVectors = function(vin, vout) {
-		var d = this.rawData;
-		var d11 = d[0],  d12 = d[4],  d13 = d[8],  d14 = d[12],
-		    d21 = d[1],  d22 = d[5],  d23 = d[9],  d24 = d[13],
-		    d31 = d[2],  d32 = d[6],  d33 = d[10], d34 = d[14];
-
-		var x, y, z;
-		for (var i = 0, l = vin.length; i < l; i += 3) {
-			var j = i + 1;
-			var k = i + 2;
-			x = vin[i];
-			y = vin[j];
-			z = vin[k];
-			vout[i] = d11 * x + d12 * y + d13 * z + d14;
-			vout[j] = d21 * x + d22 * y + d23 * z + d24;
-			vout[k] = d31 * x + d32 * y + d33 * z + d34;
+		if (!isNaN(xScale) && xScale !== 1) {
+			d[0]  *= xScale;
+			d[4]  *= xScale;
+			d[8]  *= xScale;
+			d[12] *= xScale;
+		}
+		if (!isNaN(yScale) && yScale !== 1) {
+			d[1]  *= yScale;
+			d[5]  *= yScale;
+			d[9]  *= yScale;
+			d[13] *= yScale;
+		}
+		if (!isNaN(zScale) && zScale !== 1) {
+			d[2]  *= zScale;
+			d[6]  *= zScale;
+			d[10] *= zScale;
+			d[14] *= zScale;
 		}
 	};
 
 	/**
 	*
-	* @method copyFrom
-	* @param sourceMatrix3D {Matrix3D}
+	* @method appendTranslation
+	* @param x {Number}
+	* @param [y=0] {Number}
+	* @param [z=0] {Number}
 	* @example
 	* <pre><code></code></pre>
 	**/
-	p.copyFrom = function(sourceMatrix3D) {
+	p.appendTranslation = function(x, y, z) {
+		x = x || 0;
+		y = y || 0;
+		z = z || 0;
 		var d = this.rawData;
-		var s = sourceMatrix3D.rawData;
-		for (var i = 0; i < 16; i++) {
-			d[i] = s[i];
+		var m41 = d[3], m42 = d[7], m43 = d[11], m44 = d[15];
+		if (x !== 0) {
+			d[0]  += x * m41;
+			d[4]  += x * m42;
+			d[8]  += x * m43;
+			d[12] += x * m44;
+		}
+		if (y !== 0) {
+			d[1]  += y * m41;
+			d[5]  += y * m42;
+			d[9]  += y * m43;
+			d[13] += y * m44;
+		}
+		if (z !== 0) {
+			d[2]  += z * m41;
+			d[6]  += z * m42;
+			d[10] += z * m43;
+			d[14] += z * m44;
 		}
 	};
 
 	/**
 	*
-	* @method copyToMatrix3D
-	* @param dest {Matrix3D}
-	* @example
-	* <pre><code></code></pre>
+	* @method clone
+	* @return {Matrix3D}
 	**/
-	p.copyToMatrix3D = function(dest) {
-		var d = dest.rawData;
-		var s = this.rawData;
-		for (var i = 0; i < 16; i++) {
-			d[i] = s[i];
-		}
+	p.clone = function() {
+		return new Matrix3D(this.rawData);
 	};
 
 	/**
@@ -487,42 +269,17 @@ this.createjs = this.createjs || {};
 
 	/**
 	*
-	* @method copyRowFrom
-	* @param row {uint}
-	* @param vector3D {Vector3D}
+	* @method copyFrom
+	* @param sourceMatrix3D {Matrix3D}
 	* @example
 	* <pre><code></code></pre>
 	**/
-	p.copyRowFrom = function(row, vector3D) {
-		row = row | 0;
-		if (row < 0 || 3 < row) {
-			return;
-		}
+	p.copyFrom = function(sourceMatrix3D) {
 		var d = this.rawData;
-		d[row] = vector3D.x;
-		d[row += 4] = vector3D.y;
-		d[row += 4] = vector3D.z;
-		d[row += 4] = vector3D.w;
-	};
-
-	/**
-	*
-	* @method copyRowTo
-	* @param row {uint}
-	* @param vector3D {Vector3D}
-	* @example
-	* <pre><code></code></pre>
-	**/
-	p.copyRowTo = function(row, vector3D) {
-		row = row | 0;
-		if (row < 0 || 3 < row) {
-			return;
+		var s = sourceMatrix3D.rawData;
+		for (var i = 0; i < 16; i++) {
+			d[i] = s[i];
 		}
-		var d = this.rawData;
-		vector3D.x = d[row];
-		vector3D.y = d[row += 4];
-		vector3D.z = d[row += 4];
-		vector3D.w = d[row += 4];
 	};
 
 	/**
@@ -576,13 +333,88 @@ this.createjs = this.createjs || {};
 
 	/**
 	*
-	* @method transpose
+	* @method copyRowFrom
+	* @param row {uint}
+	* @param vector3D {Vector3D}
 	* @example
 	* <pre><code></code></pre>
 	**/
-	p.transpose = function() {
+	p.copyRowFrom = function(row, vector3D) {
+		row = row | 0;
+		if (row < 0 || 3 < row) {
+			return;
+		}
 		var d = this.rawData;
-		this.rawData = new Float32Array([d[0], d[4], d[8], d[12], d[1], d[5], d[9], d[13], d[2], d[6], d[10], d[14], d[3], d[7], d[11], d[15]]);
+		d[row] = vector3D.x;
+		d[row += 4] = vector3D.y;
+		d[row += 4] = vector3D.z;
+		d[row += 4] = vector3D.w;
+	};
+
+	/**
+	*
+	* @method copyRowTo
+	* @param row {uint}
+	* @param vector3D {Vector3D}
+	* @example
+	* <pre><code></code></pre>
+	**/
+	p.copyRowTo = function(row, vector3D) {
+		row = row | 0;
+		if (row < 0 || 3 < row) {
+			return;
+		}
+		var d = this.rawData;
+		vector3D.x = d[row];
+		vector3D.y = d[row += 4];
+		vector3D.z = d[row += 4];
+		vector3D.w = d[row += 4];
+	};
+
+	/**
+	*
+	* @method copyToMatrix3D
+	* @param dest {Matrix3D}
+	* @example
+	* <pre><code></code></pre>
+	**/
+	p.copyToMatrix3D = function(dest) {
+		var d = dest.rawData;
+		var s = this.rawData;
+		for (var i = 0; i < 16; i++) {
+			d[i] = s[i];
+		}
+	};
+
+	/**
+	*
+	* @method deltaTransformVector
+	* @param v {Vector3D}
+	* @return {Vector3D}
+	* @example
+	* <pre><code></code></pre>
+	**/
+	p.deltaTransformVector = function(v) {
+		var vx = v.x;
+		var vy = v.y;
+		var vz = v.z;
+		var d = this.rawData;
+		var x = d[0] * vx + d[4] * vy + d[8] * vz;
+		var y = d[1] * vx + d[5] * vy + d[9] * vz;
+		var z = d[2] * vx + d[6] * vy + d[10] * vz;
+		return new createjs.Vector3D(x, y, z);
+	};
+
+	/**
+	*
+	* @method identity
+	* @example
+	* <pre><code></code></pre>
+	**/
+	p.identity = function() {
+		var d = this.rawData;
+		d[0] = d[5] = d[10] = d[15] = 1;
+		d[1] = d[2] = d[3] = d[4] = d[6] = d[7] = d[8] = d[9] = d[11] = d[12] = d[13] = d[14] = 0;
 	};
 
 	/**
@@ -639,11 +471,122 @@ this.createjs = this.createjs || {};
 
 	/**
 	*
-	* @method clone
-	* @return {Matrix3D}
+	* @method prepend
+	* @param rhs {Matrix3D}
+	* @example
+	* <pre><code></code></pre>
 	**/
-	p.clone = function() {
-		return new Matrix3D(this.rawData);
+	p.prepend = function(rhs) {
+		multiplication.call(this, this, rhs);
+	};
+
+	/**
+	*
+	* @method prependRotation
+	* @param degrees {Number}
+	* @param axis {Vector3D}
+	* @param [pivotPoint=null] {Vector3D}
+	* @example
+	* <pre><code></code></pre>
+	**/
+	p.prependRotation = function(degrees, axis, pivotPoint) {
+		var tx, ty, tz;
+		tx = ty = tz = 0;
+		if (pivotPoint instanceof createjs.Vector3D) {
+			tx = pivotPoint.x;
+			ty = pivotPoint.y;
+			tz = pivotPoint.z;
+		}
+		var radian = degrees * Matrix3D.DEG_TO_RAD;
+		var cos = Math.cos(radian);
+		var sin = Math.sin(radian);
+		var x = axis.x;
+		var y = axis.y;
+		var z = axis.z;
+		var x2 = x * x;
+		var y2 = y * y;
+		var z2 = z * z;
+		var ls = x2 + y2 + z2;
+		if (ls !== 0) {
+			var l = Math.sqrt(ls);
+			x /= l;
+			y /= l;
+			z /= l;
+			x2 /= ls;
+			y2 /= ls;
+			z2 /= ls;
+		}
+		var ccos = 1 - cos;
+		var m = new Matrix3D();
+		var d = m.rawData;
+		d[0]  = x2 + (y2 + z2) * cos;
+		d[1]  = x * y * ccos + z * sin;
+		d[2]  = x * z * ccos - y * sin;
+		d[4]  = x * y * ccos - z * sin;
+		d[5]  = y2 + (x2 + z2) * cos;
+		d[6]  = y * z * ccos + x * sin;
+		d[8]  = x * z * ccos + y * sin;
+		d[9]  = y * z * ccos - x * sin;
+		d[10] = z2 + (x2 + y2) * cos;
+		d[12] = (tx * (y2 + z2) - x * (ty * y + tz * z)) * ccos + (ty * z - tz * y) * sin;
+		d[13] = (ty * (x2 + z2) - y * (tx * x + tz * z)) * ccos + (tz * x - tx * z) * sin;
+		d[14] = (tz * (x2 + y2) - z * (tx * x + ty * y)) * ccos + (tx * y - ty * x) * sin;
+		this.prepend(m);
+	};
+
+	/**
+	*
+	* @method prependScale
+	* @param xScale {Number}
+	* @param [yScale=NaN] {Number}
+	* @param [zScale=NaN] {Number}
+	* @example
+	* <pre><code></code></pre>
+	**/
+	p.prependScale = function(xScale, yScale, zScale) {
+		var d = this.rawData;
+		if (!isNaN(xScale) && xScale !== 1) {
+			d[0]  *= xScale;
+			d[1]  *= xScale;
+			d[2]  *= xScale;
+			d[3]  *= xScale;
+		}
+		if (!isNaN(yScale) && yScale !== 1) {
+			d[4]  *= yScale;
+			d[5]  *= yScale;
+			d[6]  *= yScale;
+			d[7]  *= yScale;
+		}
+		if (!isNaN(zScale) && zScale !== 1) {
+			d[8]  *= zScale;
+			d[9]  *= zScale;
+			d[10] *= zScale;
+			d[11] *= zScale;
+		}
+	};
+
+	/**
+	*
+	* @method prependTranslation
+	* @param x {Number}
+	* @param [y=0] {Number}
+	* @param [z=0] {Number}
+	* @example
+	* <pre><code></code></pre>
+	**/
+	p.prependTranslation = function(x, y, z) {
+		x = x || 0;
+		y = y || 0;
+		z = z || 0;
+		var d = this.rawData;
+		var m11 = d[0],  m12 = d[4],  m13 = d[8],  m14 = d[12],
+		    m21 = d[1],  m22 = d[5],  m23 = d[9],  m24 = d[13],
+		    m31 = d[2],  m32 = d[6],  m33 = d[10], m34 = d[14],
+		    m41 = d[3],  m42 = d[7],  m43 = d[11], m44 = d[15];
+		d[12] += m11 * x + m12 * y + m13 * z;
+		d[13] += m21 * x + m22 * y + m23 * z;
+		d[14] += m31 * x + m32 * y + m33 * z;
+		d[15] += m41 * x + m42 * y + m43 * z;
 	};
 
 	/**
@@ -653,6 +596,63 @@ this.createjs = this.createjs || {};
 	**/
 	p.toString = function() {
 		return "[Matrix3D [" + Array.prototype.slice.call(this.rawData).toString() + "]]";
+	};
+
+	/**
+	*
+	* @method transformVector
+	* @param v {Vector3D}
+	* @return {Vector3D}
+	* @example
+	* <pre><code></code></pre>
+	**/
+	p.transformVector = function(v) {
+		var vx = v.x;
+		var vy = v.y;
+		var vz = v.z;
+		var d = this.rawData;
+		var x = d[0] * vx + d[4] * vy + d[8] * vz + d[12];
+		var y = d[1] * vx + d[5] * vy + d[9] * vz + d[13];
+		var z = d[2] * vx + d[6] * vy + d[10] * vz + d[14];
+		return new createjs.Vector3D(x, y, z, 1);
+	};
+
+	/**
+	*
+	* @method transformVectors
+	* @param vin {Array}
+	* @param vout {Array}
+	* @example
+	* <pre><code></code></pre>
+	**/
+	p.transformVectors = function(vin, vout) {
+		var d = this.rawData;
+		var d11 = d[0],  d12 = d[4],  d13 = d[8],  d14 = d[12],
+		    d21 = d[1],  d22 = d[5],  d23 = d[9],  d24 = d[13],
+		    d31 = d[2],  d32 = d[6],  d33 = d[10], d34 = d[14];
+
+		var x, y, z;
+		for (var i = 0, l = vin.length; i < l; i += 3) {
+			var j = i + 1;
+			var k = i + 2;
+			x = vin[i];
+			y = vin[j];
+			z = vin[k];
+			vout[i] = d11 * x + d12 * y + d13 * z + d14;
+			vout[j] = d21 * x + d22 * y + d23 * z + d24;
+			vout[k] = d31 * x + d32 * y + d33 * z + d34;
+		}
+	};
+
+	/**
+	*
+	* @method transpose
+	* @example
+	* <pre><code></code></pre>
+	**/
+	p.transpose = function() {
+		var d = this.rawData;
+		this.rawData = new Float32Array([d[0], d[4], d[8], d[12], d[1], d[5], d[9], d[13], d[2], d[6], d[10], d[14], d[3], d[7], d[11], d[15]]);
 	};
 
 	/**
