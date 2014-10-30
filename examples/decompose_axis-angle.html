@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>decompose axis-angle | Matrix3D for EaselJS</title>
+<link rel="stylesheet" type="text/css" href="css/style.css" media="all">
+<script type="text/javascript" src="http://code.createjs.com/easeljs-0.7.1.min.js"></script>
+<script type="text/javascript" src="js/vector3d-1.2.0.min.js"></script>
+<script type="text/javascript" src="js/matrix3d-0.7.0.min.js"></script>
+
+<script type="text/javascript">
+(function(window) {
+
+	var m1 = new createjs.Matrix3D();
+	m1.prependTranslation(10, 20, 30);
+	m1.prependScale(3, 4, 2);
+	m1.prependRotation(60, createjs.Vector3D.X_AXIS);
+	m1.prependRotation(-120, createjs.Vector3D.Y_AXIS);
+	m1.prependRotation(30, createjs.Vector3D.Z_AXIS);
+
+	var v1 = m1.decompose(createjs.Orientation3D.AXIS_ANGLE);
+	console.log(v1[0].toString(), v1[0].w); // [Vector3D (x=10 y=20 z=30)] 0
+	console.log(v1[1].toString(), v1[1].w); // [Vector3D (x=-0.1438504422139138 y=0.9395453419091256 z=0.31074362547239137)] 4.106377302266397
+	console.log(v1[2].toString(), v1[2].w); // [Vector3D (x=2.617801551404943 y=3.4852711285705245 z=3.1622775558598075)] 0
+
+	var m2 = new createjs.Matrix3D();
+	m2.recompose(v1, createjs.Orientation3D.AXIS_ANGLE);
+
+	var v2 = m2.decompose(createjs.Orientation3D.AXIS_ANGLE);
+	console.log(v2[0].toString(), v2[0].w); // [Vector3D (x=10 y=20 z=30)] 0
+	console.log(v2[1].toString(), v2[1].w); // [Vector3D (x=-0.14385043788448526 y=0.9395453435785759 z=0.31074362242893716)] 4.106377290720756
+	console.log(v2[2].toString(), v2[2].w); // [Vector3D (x=2.617801647627986 y=3.485271209003144 z=3.162277438139223)] 0
+
+}(window));
+</script>
+</head>
+<body>
+<canvas width="640" height="360" id="my-canvas"></canvas>
+</body>
+</html>

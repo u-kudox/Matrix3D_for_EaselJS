@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>decompose euler-angles | Matrix3D for EaselJS</title>
+<link rel="stylesheet" type="text/css" href="css/style.css" media="all">
+<script type="text/javascript" src="http://code.createjs.com/easeljs-0.7.1.min.js"></script>
+<script type="text/javascript" src="js/vector3d-1.2.0.min.js"></script>
+<script type="text/javascript" src="js/matrix3d-0.7.0.min.js"></script>
+
+<script type="text/javascript">
+(function(window) {
+
+	var m1 = new createjs.Matrix3D();
+	m1.prependTranslation(10, 20, 30);
+	m1.prependScale(4, 2, 1);
+	m1.prependRotation(90, createjs.Vector3D.X_AXIS);
+	m1.prependRotation(90, createjs.Vector3D.Y_AXIS);
+	m1.prependRotation(90, createjs.Vector3D.Z_AXIS);
+
+	var v1 = m1.decompose(createjs.Orientation3D.EULER_ANGLES);
+	console.log(v1[0].toString(), v1[0].w); // [Vector3D (x=10 y=20 z=30)] 0
+	console.log(v1[1].toString(), v1[1].w); // [Vector3D (x=3.141592653589793 y=-1.5707963267948966 z=0)] 0
+	console.log(v1[2].toString(), v1[2].w); // [Vector3D (x=1 y=2 z=4)] 0
+
+	var m2 = new createjs.Matrix3D();
+	m2.recompose(v1, createjs.Orientation3D.EULER_ANGLES);
+
+	var v2 = m2.decompose(createjs.Orientation3D.EULER_ANGLES);
+	console.log(v2[0].toString(), v2[0].w); // [Vector3D (x=10 y=20 z=30)] 0
+	console.log(v2[1].toString(), v2[1].w); // [Vector3D (x=3.141592653589793 y=-1.5707963267948966 z=0)] 0
+	console.log(v2[2].toString(), v2[2].w); // [Vector3D (x=1 y=2 z=4)] 0
+
+}(window));
+</script>
+</head>
+<body>
+<canvas width="640" height="360" id="my-canvas"></canvas>
+</body>
+</html>

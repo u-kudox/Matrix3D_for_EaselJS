@@ -388,6 +388,123 @@ this.createjs = this.createjs || {};
 
 	/**
 	*
+	* @method decompose
+	* @param [orientationStyle="eulerAngles"] {String}
+	* @return {Array}
+	* @example
+	* <pre><code></code></pre>
+	**/
+	p.decompose = function(orientationStyle) {
+		var o3D = Orientation3D;
+		var eulerAngles = o3D.EULER_ANGLES;
+		var quaternion = o3D.QUATERNION;
+		var axisAngle = o3D.AXIS_ANGLE;
+		orientationStyle = orientationStyle || eulerAngles;
+		if (orientationStyle !== eulerAngles && orientationStyle !== quaternion && orientationStyle !== axisAngle) {
+			throw new Error("The 1st parameter is invalid.");
+		}
+		var d = this.rawData;
+		var vTranslate = new createjs.Vector3D(d[12], d[13], d[14]);
+		var d11 = d[0], d12 = d[4], d13 = d[8],
+		    d21 = d[1], d22 = d[5], d23 = d[9],
+		    d31 = d[2], d32 = d[6], d33 = d[10];
+		var scaleX = Math.sqrt(d11 * d11 + d21 * d21 + d31 * d31);
+		var scaleY = Math.sqrt(d12 * d12 + d22 * d22 + d32 * d32);
+		var scaleZ = Math.sqrt(d13 * d13 + d23 * d23 + d33 * d33);
+		var vScale = new createjs.Vector3D(scaleX, scaleY, scaleZ);
+		if (0 < scaleX) {
+			d11 /= scaleX;
+			d21 /= scaleX;
+			d31 /= scaleX;
+		}
+		if (0 < scaleY) {
+			d12 /= scaleY;
+			d22 /= scaleY;
+			d32 /= scaleY;
+		}
+		if (0 < scaleZ) {
+			d13 /= scaleZ;
+			d23 /= scaleZ;
+			d33 /= scaleZ;
+		}
+		var vAngle;
+		if (orientationStyle === eulerAngles) {
+			var radianX, radianY, radianZ;
+			var md31 = -d31;
+			if (md31 <= -1) {
+				radianY = -Math.PI * 0.5;
+			} else if (1 <= md31) {
+				radianY = Math.PI * 0.5;
+			} else {
+				radianY = Math.asin(md31);
+			}
+			var cosY = Math.cos(radianY);
+			if (cosY <= 0.001) {
+				radianZ = 0;
+				radianX = Math.atan2(-d23, d22);
+			} else {
+				radianZ = Math.atan2(d21, d11);
+				radianX = Math.atan2(d32, d33);
+			}
+			vAngle = new createjs.Vector3D(radianX, radianY, radianZ);
+		} else {
+			var traces = [d11 + d22 + d33, d11 - d22 - d33, d22 - d11 - d33, d33 - d11 - d22];
+			var traceIndex = traces.indexOf(Math.max.apply(null, traces));
+			var traceValue = Math.sqrt(traces[traceIndex] + 1) * 0.5;
+			var m = 0.25 / traceValue;
+			var x, y, z, w;
+			switch (traceIndex) {
+				case 0 :
+					x = (d32 - d23) * m;
+					y = (d13 - d31) * m;
+					z = (d21 - d12) * m;
+					w = traceValue;
+					break;
+				case 1 :
+					x = traceValue;
+					y = (d21 + d12) * m;
+					z = (d13 + d31) * m;
+					w = (d32 - d23) * m;
+					break;
+				case 2 :
+					x = (d21 + d12) * m;
+					y = traceValue;
+					z = (d32 + d23) * m;
+					w = (d13 - d31) * m;
+					break;
+				case 3 :
+					x = (d13 + d31) * m;
+					y = (d32 + d23) * m;
+					z = traceValue;
+					w = (d21 - d12) * m;
+					break;
+			}
+			var length = Math.sqrt(x * x + y * y + z * z + w * w);
+			if (length !== 0) {
+				x /= length;
+				y /= length;
+				z /= length;
+				w /= length;
+			}
+			if (orientationStyle === axisAngle) {
+				var t = Math.acos(w);
+				var st = Math.sin(t);
+				if (st !== 0) {
+					x /= st;
+					y /= st;
+					z /= st;
+					w = t * 2;
+				} else {
+					x = y = z = w = 0;
+				}
+			}
+			vAngle = new createjs.Vector3D(x, y, z, w);
+		}
+		return [vTranslate, vAngle, vScale];
+	};
+
+	/**
+	*
 	* @method deltaTransformVector
 	* @param v {Vector3D}
 	* @return {Vector3D}
@@ -587,6 +704,88 @@ this.createjs = this.createjs || {};
 		d[13] += m21 * x + m22 * y + m23 * z;
 		d[14] += m31 * x + m32 * y + m33 * z;
 		d[15] += m41 * x + m42 * y + m43 * z;
+	};
+
+	/**
+	*
+	* @method recompose
+	* @param components {Array}
+	* @param [orientationStyle="eulerAngles"] {String}
+	* @return {Boolean}
+	* @example
+	* <pre><code></code></pre>
+	**/
+	p.recompose = function(components, orientationStyle) {
+		if (!components || components.length < 3) {
+			return false;
+		} else {
+			for (var i = 0; i < 3; i++) {
+				if (!(components[i] instanceof createjs.Vector3D)) {
+					return false;
+				}
+			}
+		}
+		var o3D = Orientation3D;
+		var eulerAngles = o3D.EULER_ANGLES;
+		var quaternion = o3D.QUATERNION;
+		var axisAngle = o3D.AXIS_ANGLE;
+		orientationStyle = orientationStyle || eulerAngles;
+		if (orientationStyle !== eulerAngles && orientationStyle !== quaternion && orientationStyle !== axisAngle) {
+			throw new Error("The 2nd parameter is invalid.");
+		}
+		var d = this.rawData;
+		var vTranslate = components[0];
+		d[12] = vTranslate.x;
+		d[13] = vTranslate.y;
+		d[14] = vTranslate.z;
+		var vAngle = components[1];
+		var vScale = components[2];
+		d[0] = d[1] = d[2] = vScale.x;
+		d[4] = d[5] = d[6] = vScale.y;
+		d[8] = d[9] = d[10] = vScale.z;
+		if (orientationStyle === eulerAngles) {
+			var radianX = vAngle.x;
+			var cosX = Math.cos(radianX);
+			var sinX = Math.sin(radianX);
+			var radianY = vAngle.y;
+			var cosY = Math.cos(radianY);
+			var sinY = Math.sin(radianY);
+			var radianZ = vAngle.z;
+			var cosZ = Math.cos(radianZ);
+			var sinZ = Math.sin(radianZ);
+			d[0] *= cosY * cosZ;
+			d[1] *= cosY * sinZ;
+			d[2] *= -sinY;
+			d[4] *= sinX * sinY * cosZ - cosX * sinZ;
+			d[5] *= sinX * sinY * sinZ + cosX * cosZ;
+			d[6] *= sinX * cosY;
+			d[8] *= cosX * sinY * cosZ + sinX * sinZ;
+			d[9] *= cosX * sinY * sinZ - sinX * cosZ;
+			d[10] *= cosX * cosY;
+		} else {
+			var x = vAngle.x;
+			var y = vAngle.y;
+			var z = vAngle.z;
+			var w = vAngle.w;
+			if (orientationStyle === axisAngle) {
+				var hw = w * 0.5;
+				var st = Math.sin(hw);
+				x *= st;
+				y *= st;
+				z *= st;
+				w = Math.cos(hw);
+			}
+			d[0] *= 1 - 2 * (y * y + z * z);
+			d[1] *= 2 * (x * y + z * w);
+			d[2] *= 2 * (x * z - y * w);
+			d[4] *= 2 * (x * y - z * w);
+			d[5] *= 1 - 2 * (x * x + z * z);
+			d[6] *= 2 * (y * z + x * w);
+			d[8] *= 2 * (x * z + y * w);
+			d[9] *= 2 * (y * z - x * w);
+			d[10] *= 1 - 2 * (x * x + y * y);
+		}
+		return true;
 	};
 
 	/**

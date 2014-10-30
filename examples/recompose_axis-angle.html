@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>recompose axis-angle | Matrix3D for EaselJS</title>
+<link rel="stylesheet" type="text/css" href="css/style.css" media="all">
+<script type="text/javascript" src="http://code.createjs.com/easeljs-0.7.1.min.js"></script>
+<script type="text/javascript" src="js/vector3d-1.2.0.min.js"></script>
+<script type="text/javascript" src="js/matrix3d-0.7.0.min.js"></script>
+
+<script type="text/javascript">
+(function(window) {
+
+	var m1 = new createjs.Matrix3D();
+	m1.prependTranslation(10, 20, 30);
+	m1.prependScale(3, 4, 2);
+	m1.prependRotation(60, createjs.Vector3D.X_AXIS);
+	m1.prependRotation(-120, createjs.Vector3D.Y_AXIS);
+	m1.prependRotation(30, createjs.Vector3D.Z_AXIS);
+
+	var v1 = m1.decompose(createjs.Orientation3D.AXIS_ANGLE);
+
+	var m2 = new createjs.Matrix3D();
+	m2.recompose(v1, createjs.Orientation3D.AXIS_ANGLE);
+	console.log(m2.rawData[0], m2.rawData[4], m2.rawData[8], m2.rawData[12]);
+	console.log(m2.rawData[1], m2.rawData[5], m2.rawData[9], m2.rawData[13]);
+	console.log(m2.rawData[2], m2.rawData[6], m2.rawData[10], m2.rawData[14]);
+	console.log(m2.rawData[3], m2.rawData[7], m2.rawData[11], m2.rawData[15]);
+	/*
+	-1.40605890750885 0.15081268548965454 -2.6638987064361572 10
+	-1.2239407300949097 2.84383487701416 1.0752395391464233 20
+	1.8378936052322388 2.0092222690582275 -1.32193124294281 30
+	0 0 0 1
+	*/
+
+	var v2 = m2.decompose(createjs.Orientation3D.AXIS_ANGLE);
+
+	var m3 = new createjs.Matrix3D();
+	m3.recompose(v2, createjs.Orientation3D.AXIS_ANGLE);
+	console.log(m3.rawData[0], m3.rawData[4], m3.rawData[8], m3.rawData[12]);
+	console.log(m3.rawData[1], m3.rawData[5], m3.rawData[9], m3.rawData[13]);
+	console.log(m3.rawData[2], m3.rawData[6], m3.rawData[10], m3.rawData[14]);
+	console.log(m3.rawData[3], m3.rawData[7], m3.rawData[11], m3.rawData[15]);
+	/*
+	-1.40605890750885 0.15081270039081573 -2.6638987064361572 10
+	-1.2239407300949097 2.84383487701416 1.0752395391464233 20
+	1.8378936052322388 2.0092222690582275 -1.32193124294281 30
+	0 0 0 1
+	*/
+
+}(window));
+</script>
+</head>
+<body>
+<canvas width="640" height="360" id="my-canvas"></canvas>
+</body>
+</html>

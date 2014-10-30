@@ -45,6 +45,7 @@ You can use [Vector3D for EaselJS](https://github.com/u-kudox/Vector3D_for_Easel
 * copyRowFrom
 * copyRowTo
 * copyToMatrix3D
+* decompose
 * deltaTransformVector
 * identity
 * invert
@@ -52,6 +53,7 @@ You can use [Vector3D for EaselJS](https://github.com/u-kudox/Vector3D_for_Easel
 * prependRotation
 * prependScale
 * prependTranslation
+* recompose
 * toString
 * transformVector
 * transformVectors
