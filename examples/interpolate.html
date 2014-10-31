@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>interpolate | Matrix3D for EaselJS</title>
+<link rel="stylesheet" type="text/css" href="css/style.css" media="all">
+<script type="text/javascript" src="http://code.createjs.com/easeljs-0.7.1.min.js"></script>
+<script type="text/javascript" src="js/vector3d-1.2.0.min.js"></script>
+<script type="text/javascript" src="js/matrix3d-0.8.0.min.js"></script>
+
+<script type="text/javascript">
+(function(window) {
+
+	var m1 = new createjs.Matrix3D();
+	m1.prependTranslation(10, 20, 30);
+	m1.prependRotation(180, createjs.Vector3D.X_AXIS);
+	m1.prependRotation(0, createjs.Vector3D.Z_AXIS);
+	var v1 = m1.decompose(createjs.Orientation3D.AXIS_ANGLE);
+	console.log(v1[0].toString(), v1[0].w); // [Vector3D (x=10 y=20 z=30)] 0
+	console.log(v1[1].toString(), v1[1].w); // [Vector3D (x=1 y=0 z=0)] 3.141592653589793
+
+	var m2 = new createjs.Matrix3D();
+	m2.prependTranslation(-10, 30, -50);
+	m2.prependRotation(0, createjs.Vector3D.X_AXIS);
+	m2.prependRotation(90, createjs.Vector3D.Z_AXIS);
+	var v2 = m2.decompose(createjs.Orientation3D.AXIS_ANGLE);
+	console.log(v2[0].toString(), v2[0].w); // [Vector3D (x=-10 y=30 z=-50)] 0
+	console.log(v2[1].toString(), v2[1].w); // [Vector3D (x=0 y=0 z=1)] 1.5707963267948966
+
+	var m3 = createjs.Matrix3D.interpolate(m1, m2, 0.5);
+	var v3 = m3.decompose(createjs.Orientation3D.AXIS_ANGLE);
+	console.log(v3[0].toString(), v3[0].w); // [Vector3D (x=0 y=25 z=-10)] 0
+	console.log(v3[1].toString(), v3[1].w); // [Vector3D (x=0.8164965832566833 y=0 z=0.5773502658959827)] 2.09439510733366
+
+	var m4 = createjs.Matrix3D.interpolate(m1, m2, 1);
+	var v4 = m4.decompose(createjs.Orientation3D.AXIS_ANGLE);
+	console.log(v4[0].toString(), v4[0].w); // [Vector3D (x=-10 y=30 z=-50)] 0
+	console.log(v4[1].toString(), v4[1].w); // [Vector3D (x=0 y=0 z=1)] 1.5707963267948966
+
+}(window));
+</script>
+</head>
+<body>
+<canvas width="640" height="360" id="my-canvas"></canvas>
+</body>
+</html>

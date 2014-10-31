@@ -1,6 +1,6 @@
 {
   "name": "Matrix3D_for_EaselJS",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "description": "Matrix3D for EaselJS adds AS3 like Matrix3D class to EaselJS.",
   "main": "Gruntfile.js",
   "repository": {
