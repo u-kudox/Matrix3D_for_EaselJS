@@ -48,6 +48,8 @@ You can use [Vector3D for EaselJS](https://github.com/u-kudox/Vector3D_for_Easel
 * decompose
 * deltaTransformVector
 * identity
+* interpolate [static]
+* interpolateTo
 * invert
 * prepend
 * prependRotation

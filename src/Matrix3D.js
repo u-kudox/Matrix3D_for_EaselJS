@@ -1,6 +1,6 @@
 /**
  * Matrix3D for EaselJS
- * Version: 0.80
+ * Version: 0.90
  * Contact and bug reports : http://kudox.jp/contact or http://twitter.com/u_kudox
  * License : public domain
  **/
@@ -532,6 +532,64 @@ this.createjs = this.createjs || {};
 		var d = this.rawData;
 		d[0] = d[5] = d[10] = d[15] = 1;
 		d[1] = d[2] = d[3] = d[4] = d[6] = d[7] = d[8] = d[9] = d[11] = d[12] = d[13] = d[14] = 0;
+	};
+
+	/**
+	*
+	* @method interpolateTo
+	* @param toMat {Matrix3D}
+	* @param percent {Number}
+	* @example
+	* <pre><code></code></pre>
+	**/
+	p.interpolateTo = function(toMat, percent) {
+		if (percent < 0) {
+			percent = 0;
+		} else if (1 < percent) {
+			percent = 1;
+		}
+		var quaternion = Orientation3D.QUATERNION;
+		var c0 = this.decompose(quaternion);
+		var c1 = toMat.decompose(quaternion);
+		var t0 = c0[0];
+		var t1 = c1[0];
+		t1 = t1.subtract(t0);
+		t1.scaleBy(percent);
+		t0 = t0.add(t1);
+		var r0 = c0[1];
+		var r1 = c1[1];
+		var x0 = r0.x;
+		var y0 = r0.y;
+		var z0 = r0.z;
+		var w0 = r0.w;
+		var x1 = r1.x;
+		var y1 = r1.y;
+		var z1 = r1.z;
+		var w1 = r1.w;
+		var cos = x0 * x1 + y0 * y1 + z0 * z1 + w0 * w1;
+		if (cos < 0) {
+			x1 = -x1;
+			y1 = -y1;
+			z1 = -z1;
+			w1 = -w1;
+			cos = -cos;
+		}
+		var k0, k1;
+		if (0.9999 < cos) {
+			k0 = 1 - percent;
+			k1 = percent;
+		} else {
+			var sin = Math.sqrt(1 - cos * cos);
+			var omega = Math.atan2(sin, cos);
+			var rsin = 1 / sin;
+			k0 = Math.sin((1 - percent) * omega) * rsin;
+			k1 = Math.sin(percent * omega) * rsin;
+		}
+		var x = x0 * k0 + x1 * k1;
+		var y = y0 * k0 + y1 * k1;
+		var z = z0 * k0 + z1 * k1;
+		var w = w0 * k0 + w1 * k1;
+		this.recompose([t0, new createjs.Vector3D(x, y, z, w), new createjs.Vector3D(1, 1, 1)], quaternion);
 	};
 
 	/**
