@@ -27,6 +27,14 @@ module.exports = function(grunt) {
 			}
 		},
 		replace : {
+			easeljs : {
+				src : ['examples/*.html'],
+				overwrite : true,
+				replacements : [{
+					from : /easeljs-.+min\.js/,
+					to : 'easeljs-0.8.0.min.js'
+				}]
+			},
 			matrix3d : {
 				src : ['examples/*.html'],
 				overwrite : true,
@@ -40,7 +48,7 @@ module.exports = function(grunt) {
 				overwrite : true,
 				replacements : [{
 					from : /js\/vector3d-.+min\.js/,
-					to : 'js/vector3d-1.2.0.min.js'
+					to : 'js/vector3d-1.3.0.min.js'
 				}]
 			}
 		}
